@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= "uDahser" %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+  	<a href="/"><h1>uDasher</h1></a>
+    <form action = "/new_user" method="POST">
+    <table>
+    <tr>
+    	<td width="100px"><label>Email:</label></td>
+    	<td><input type="textbox" name = "email"></input><td>
+    </tr>
+    <tr>
+    	<td width="100px"><label>Password:</label></td>
+    	<td><input type="password" name = "password"></input></td>
+    </tr>
+    </tr>
+    	<td width="100px"><label>Submit:</label></td>
+		<td><input type= "submit" value="Enter"></input></td>
+    </tr>
+	</table>
+</form>
+	</body>
+</html>
