@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>"uDahser"</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+  	<a href="/"><h1>uDasher</h1></a>
+    <h2><%=username%>'s Profile, Password: <%=password%></h2>
+    <h3>Trips</h3>
+    <%for (var i=0; i<trips.length; i++) {%>
+    <p> Trip <%-i%>:</p>
+    <p> Dasher: <%=trips[i].dasher%> <br />
+    	Origin: <%=trips[i].origin%><br />
+    	Destination: <%=trips[i].destination%><br />
+    	Items:<br />
+    	Cost: <%=trips[i].cost%><br />
+    	Rate: <%=trips[i].rate%><br />
+    </p>
+    <%}%>
+    <br />
+    <br />
+    <h3>Add a new Trip</h3>
+    <form action = "/new_trip" method="POST">
+    <table>
+    <tr>
+    	<td width="100px"><label>Origin:</label></td>
+    	<td><input type="textbox" name = "origin"></input></td>
+    </tr>
+     	<td width="100px"><label>Destination:</label></td>
+    	<td><input type="textbox" name = "destination"></input><td>
+    </tr>
+    <tr>
+    	<td width="100px"><label>Cost:</label></td>
+    	<td><input type="textbox" name = "cost"></input></td>
+    </tr>
+    <tr>
+    	<td width="100px"><label>Rate:</label></td>
+    	<td><input type="textbox" name = "rate"></input></td>
+    </tr>
+    <tr>
+    	<td width="100px"></td>
+    	<td><input type="submit" value = "Submit"></input></td>
+    </tr>
+	</table>
+	</form>
+   </body>
+</html>
