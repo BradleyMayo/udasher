@@ -6,6 +6,7 @@
   </head>
   <body>
   	<a href="/"><h1>uDasher</h1></a>
+  	<div style = "float: right"><a href="/logout">Logout</a></div>
     <h2><%=username%>'s Profile, Password: <%=password%></h2>
     <h3>Trips</h3>
     <%for (var i=0; i<trips.length; i++) {%>

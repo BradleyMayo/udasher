@@ -38,7 +38,8 @@ if ('development' == app.get('env')) {
 app.get('/', routes.home);
 app.get('/trips', routes.trips);
 app.get('/signup', routes.signup);
-app.get('/user/:id', routes.profile); 
+app.get('/logout', routes.logout);
+//app.get('/user/:id', routes.profile); 
 
 app.get('/welcome', function(req, res) {
     if (req.session.logged) res.send('Welcome back!');
@@ -49,6 +50,7 @@ app.get('/welcome', function(req, res) {
 });
 //-----------------------------------------------------------------
 
+app.post('/profile', routes.profile);
 app.post('/new_user', routes.new_user);
 app.post('/new_trip', routes.new_trip);
 
