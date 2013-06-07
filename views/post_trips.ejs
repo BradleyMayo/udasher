@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>uDasher</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <a href="/user/:id"><div id="user_box" class="clearfix"> <%=facebook.displayName%> | [logout]</div></a>
+    <div class = "content">
+      <div id="post_listing">
+        <a href="/home"><h1>uDasher</h1></a>
+        <h3>Add a new Trip:</h3>
+        <form action = "/new_trip" method="POST">
+        <table>
+          <tr>
+            <td width="100px"><label>Origin:</label></td>
+            <td><input name ="origin" type="textbox"></input><td>
+          </tr>
+          <tr>
+            <td width="100px"><label>Destination:</label></td>
+            <td><input name="destination" type="textbox"></input></td>
+          <tr>
+            <td width="100px"><label>Cost:</label></td>
+            <td><input name="cost" type="textbox" size=5 ></input></td>
+          </tr>
+          <tr>
+            <td width="100px"><label>Rate:</label></td>
+            <td><input name="rate" type="textbox" size=5 ></input></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td><input class="btn" id="add_btn" type= "submit" value="Enter"></input></td>
+          </tr>
+        </table>
+        </form>
+      </div>
+    </div>
+   </body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>uDasher</title>
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+	</head>
+	<body>
+		<a href="/user/:id"><div id="user_box" class="clearfix">[username] | [logout]</div></a>
+		<div class="content">
+			<div id="all_listings">
+				<a href="/home"><h1>uDasher</h1></a>
+				<h2>All Trips:</h2>
+				<% for(var i=0; i<trips.length; i++){%>
+				<div class="trip">
+    		    	<p> Dasher <%=trips[i].dasher%><br />
+    	    		Origin <%=trips[i].origin%><br />
+    	    		Destination <%=trips[i].destination%><br />
+    	    		Cost $<%=trips[i].cost%><br />
+					Rate <%=trips[i].rate%><br /></p>
+				</div>
+				<%}%>
+			</div>
+		</div>
+	</body>
+</html>

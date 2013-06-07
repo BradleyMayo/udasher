@@ -1,8 +1,125 @@
+var schemas = require('./schemas'); 
 var objects = require('./objects');
-var db = require('mongojs').connect('newDb', ['users']);
+var mongoose = require('mongoose'); 
 
-function setSession(req, res){
-	db.users.find({username: req.param('username'), password: req.param('password')}, function(err, users){
+mongoose.connect('mongodb://localhost/udasher'); 
+
+db = mongoose.connection; 
+
+//Collections are plural
+var user = db.model('user', schemas.user()); 
+var trip = db.model('trip', schemas.trip()); 
+var item = db.model('item', schemas.item()); 
+
+exports.addUserWithEmailAndPassword = function(req, res){
+	var newUser = new user({email : req.param('email'), password : req.param('password')});
+
+	user.findOne({email: req.param('email')}, function(err, user){
+		if (err) throw err;
+		else if (user == undefined) {
+			newUser.save(function(err){
+				console.log("Adding User: " + req.param('email'));//removable
+				if(err) throw err;	
+				else exports.loginWithEmailAndPassword(req, res);
+			});
+		}
+		else {
+			console.log("User already exists");//change
+			res.redirect('/');
+		}
+	});
+}
+
+exports.addUserWithFB = function(profile){
+	var FBuser = new user({facebook: profile});
+	user.findOne({'facebook.id': profile.id}, function(err, user){
+		if (err) throw err; 
+		else if (user != undefined);
+		else{
+			FBuser.save(function(err){
+				console.log("Adding User: " + profile.displayName);//removable
+				if(err) throw err;
+			});
+		}
+	});
+}
+
+exports.loginWithFacebook = function(req, res){
+	user.findOne({'facebook.id': req.user}, function(err, user){
+		if(err) throw err; 
+		else{
+			console.log("Facebook Profile Found, logging in.");//removable
+			req.session._id = user._id; 
+			req.session.save();
+			res.redirect('/');  
+		}
+	}); 
+}
+
+exports.loginWithEmailAndPassword = function(req, res){
+	user.findOne({email: req.param('email'), password: req.param('password')}, function(err, user){
+		if (err) {
+			throw err;
+		}
+		else if (user == undefined){
+			console.log("USER COULD NOT BE FOUND: database.loginWithEmailAndPassword");//change
+			res.redirect('/');
+		}
+		else {
+			req.session._id = user._id;
+			req.session.save();
+			res.redirect('/');
+		}
+	});
+}
+
+exports.display = function(req, res, route)
+{
+	var client = "";  
+	user.findOne({'_id': req.session._id}, function(err, user){
+		if(err) throw err; 
+		else if(user == undefined){
+			console.log('USER NOT FOUND: database.setSession');
+		}
+		else{
+			res.render(route, user); 
+		}
+	});
+}
+
+exports.addItem = function(req, res){
+	var newItem = new item(objects.newItem(req.param('origin'), req.param('destination'), req.session._id));
+	newItem.save();
+	user.findOne({_id : req.session._id}, function(err, usr){
+		usr.trips.push(newItem._id);
+		res.redirect('all_items');
+	});
+}
+
+exports.addTrip = function(req, res){
+	var newTrip = new trip(objects.newTrip(req.param('origin'), req.param('destination'), req.param('cost'), req.param('rate'), req.session._id));
+	newTrip.save();
+	user.findOne({_id : req.session._id}, function(err, usr){
+		usr.trips.push(newTrip._id);
+		res.redirect('all_trips');
+	});
+
+}
+
+exports.showAllItems = function(req, res){
+	item.find(function(err, items){
+		res.render('all_items', {items : items});
+	});
+}
+
+exports.showAllTrips = function(req, res){
+	trip.find(function(err, trips){
+		res.render('all_trips', {trips : trips});
+	});
+}
+/*May be needed in the future but needs rethinking. For now all add and get function automaticall save sessions
+function setSession(req, res, method){
+	db.users.find({email: req.param('email'), password: req.param('password')}, function(err, users){
 		if (err) throw err;
 		else if (users[0] == undefined) {
 			console.log('USER NOT FOUND: database.setSession');
@@ -13,106 +130,22 @@ function setSession(req, res){
 		}
 	});
 }
-
-/*
-Accepts a request, response, and function as parameters. 
-Request is used to obtain information submitted by the user. 
-Response is passed to the function after the user information has been extracted from the database.
-The function is called after the information is found and is passed through
-
-First the database is queried for the username designated by the request parameter username.
-The array of users with that name (should only be one because the username is meant to be unique) is passed into the callback function along with any errors that may have occured.
-
-After throwing any errors, the users array is tested to see if a user with the name has been found. If one has, the console displayes an error message, if one hasent been found, the username and password found in the parameters of the request are both passed into the object constructor and saved into the database as a new user.
-
-Because the database creates its own unique _id parameter upon addition, the function searches for the just added user and saves the _id from the database and saves it in the users session via the req.session call.
-
-The callback function initially passed into this function is then called with the newly modified request information and the appropriate response object.
-
 */
-exports.addUser = function(req, res){
-	db.users.find({username: req.param('username')}, function(err, users){
-		if (err) throw err;
-		else if (users[0] != undefined) {
-			console.log("User already exists");//change
+/*Debatably useless...need more time to determine
+
+exports.loginWithSession = function(req, res){
+	user.findOne({'facebook.id': profile.id}, function(err, user){
+		if (err) throw err; 
+		else if(user == undefined){
+			console.log('USER NOT FOUND: database.setSession');
 		}
 		else {
-			console.log("Adding User: " + req.param('username'));//removable
-			db.users.save(objects.newProfile(req.param('username'), req.param('password')));
-			
-			
-			setSession(req, res);
+			req.session._id = user._id;
+			req.session.save();
 			res.redirect('/');
-			/*
-			db.users.find({username: req.param('username')}, function(err, users){//functionable
-				req.session._id = users[0]._id;
-				f(req, res);
-			});*/
 		}
 	});
 }
+*/
 
-//consider renaming to 'displayUser' instead of getUser
-exports.getUserWithSession_id = function(req, res){
-	db.users.find({_id: db.ObjectId(req.session._id.toString())}, function(err, users){
-		if (users[0] != undefined){
-			res.render('user', users[0]);
-		}
-		else {
-			getUserWithUsernameAndPassword(req, res);
-		}
-	});
-}
 
-exports.getUserWithUsernameAndPassword = function(req, res){
-	db.users.find({username: req.param('username'), password: req.param('password')}, function(err, users){
-		console.log(users[0]);//removable
-		if (err) {
-			throw err;
-		}
-		else if (users[0] == undefined){
-			console.log("USER COULD NOT BE FOUND: database.getUserWithUsernameAndPassword");//change
-		}
-		else {
-			setSession(req, res);
-			res.render('user', users[0]);
-		}
-	});
-}
-
-exports.addTrip = function(req, res, f){
-	db.users.find({_id: db.ObjectId(req.session._id.toString())}, function(err, users){
-		if (users[0] != undefined){
-			db.users.update({_id: db.ObjectId(req.session._id.toString())}, 
-			{
-				$push: { 'trips': objects.newTrip(users[0].username, req.param('origin'),
-				req.param('destination'), req.param('cost'), req.param('rate'))}
-			});
-			res.redirect("/");
-		}
-	});
-}
-
-exports.getTrips = function(req, res){
-	db.users.find({"trips.dasher": {"$exists": true}}, function(err, tripsAsObjects){
-
-		//compiles the returned objects and arrays into a single array of arrays for display
-		var trips = [];
-		for (var i = 0; i < tripsAsObjects.length; i++){
-			for (var j = 0; j < tripsAsObjects[i].trips.length; j++){
-				trips.push(tripsAsObjects[i].trips[j]);
-			}
-		}
-		
-		if (err){
-			throw err;
-		}
-		else if (trips != undefined){
-			res.render('trips', {"trips": trips});
-		}
-		else {
-			console.log("No Trips Found");//change
-		}
-
-	});
-}

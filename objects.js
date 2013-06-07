@@ -1,38 +1,59 @@
-exports.newItem = function (sender, origin, destination){
+
+exports.newItem = function (origin, destination, sender){
 	return {
-		sender : null,
-		dasher : dasher,
-		origin : origin,
-		destination : destination,
+		trip_id : undefined,//designated by unique trip._id
+
+		sender : sender,//designated by username
+
+		origin : origin,//+newLocation
+		destination : destination,//+newLocation
+		
+		completed : false,
 	}
 }
 
-exports.newTrip = function (dasher, origin, destination, cost, rate){
+exports.newTrip = function (origin, destination, cost, rate, dasher){
 	return {
-		dasher : dasher,
-		origin : origin,
-		destination : destination,
-		items : [],
-		cost : cost,
-		rate : rate,
+		items : [],//designated by item_id
+
+		dasher : dasher,//designated by username
+		
+		origin : origin,//+newLocation
+		destination : destination,//+newLocation
+
+		cost : cost,//+
+		rate : rate,//+
+		
+		completed : false,
 	}
 }
 
-exports.newProfile = function (username, password){
+exports.newUser = function (username, password){
 	return {
-		username : username,
-		password : password,
-		trips : [],
+		email : email,//+
+		password : password,//+
+		
+		name : undefined,//+newName
+
+		trips : [],//designated by unique trip._id
+		items : [],//designated by unique item._id
 	}
 }
+
 exports.newLocation = function (country, city, state, zip, address){
 	return {
-		country: country,
-		city: city,
-		state: state,
-		zip: zip,
-		address: address,
+		country: country,//+
+		city: city,//+
+		state: state,//+
+		zip: zip,//+
+		address: address,//+
 	}
 }
 
-
+exports.newName = function (first, last, middleInitial){
+	return {
+		first : first,//+
+		last : last,//+
+		middleInitial : middleInitial,//+
+	}
+}
