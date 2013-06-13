@@ -12,7 +12,7 @@ var trip = db.model('trip', schemas.trip());
 var item = db.model('item', schemas.item()); 
 
 exports.addUserWithEmailAndPassword = function(req, res){
-	var newUser = new user({email : req.param('email'), password : req.param('password')});
+	var newUser = new user({email : req.param('email'), password : req.param('password'), displayName : req.param('displayName')});
 
 	user.findOne({email: req.param('email')}, function(err, user){
 		if (err) throw err;
@@ -31,7 +31,8 @@ exports.addUserWithEmailAndPassword = function(req, res){
 }
 
 exports.addUserWithFB = function(profile){
-	var FBuser = new user({facebook: profile});
+	var FBuser = new user({facebook: profile, displayName : profile.displayName});
+	
 	user.findOne({'facebook.id': profile.id}, function(err, user){
 		if (err) throw err; 
 		else if (user != undefined);
@@ -50,6 +51,7 @@ exports.loginWithFacebook = function(req, res){
 		else{
 			console.log("Facebook Profile Found, logging in.");//removable
 			req.session._id = user._id; 
+			req.session.displayName = user.facebook.displayName; 
 			req.session.save();
 			res.redirect('/');  
 		}
@@ -67,6 +69,7 @@ exports.loginWithEmailAndPassword = function(req, res){
 		}
 		else {
 			req.session._id = user._id;
+			req.session.displayName = user.displayName;
 			req.session.save();
 			res.redirect('/');
 		}
@@ -75,14 +78,14 @@ exports.loginWithEmailAndPassword = function(req, res){
 
 exports.display = function(req, res, route)
 {
-	var client = "";  
+	console.log(req.session.displayName); 
 	user.findOne({'_id': req.session._id}, function(err, user){
 		if(err) throw err; 
 		else if(user == undefined){
 			console.log('USER NOT FOUND: database.setSession');
 		}
 		else{
-			res.render(route, user); 
+			res.render(route, {displayName: req.session.displayName, user: user}); 
 		}
 	});
 }
@@ -91,7 +94,7 @@ exports.addItem = function(req, res){
 	var newItem = new item(objects.newItem(req.param('origin'), req.param('destination'), req.session._id));
 	newItem.save();
 	user.findOne({_id : req.session._id}, function(err, usr){
-		usr.trips.push(newItem._id);
+		user.trips.push(newItem._id);
 		res.redirect('all_items');
 	});
 }
@@ -106,17 +109,24 @@ exports.addTrip = function(req, res){
 
 }
 
-exports.showAllItems = function(req, res){
+exports.showAllItems = function(req, res, route){
 	item.find(function(err, items){
-		res.render('all_items', {items : items});
-	});
+		if (err) throw err; 
+		else{
+			res.render(route, {displayName: req.session.displayName, items: items});
+		}
+	});	
 }
 
-exports.showAllTrips = function(req, res){
+exports.showAllTrips = function(req, res, route){
 	trip.find(function(err, trips){
-		res.render('all_trips', {trips : trips});
-	});
+		if (err) throw err; 
+		else{
+			res.render(route, {displayName: req.session.displayName, trips: trips});
+		}
+	});	
 }
+
 /*May be needed in the future but needs rethinking. For now all add and get function automaticall save sessions
 function setSession(req, res, method){
 	db.users.find({email: req.param('email'), password: req.param('password')}, function(err, users){

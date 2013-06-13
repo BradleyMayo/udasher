@@ -35,7 +35,7 @@ exports.user = function (){
 		email       : String,
 		password    : String,
 		
-		name        : name(),
+		displayName : String,
 
 		facebook    : Object,
 		trustRating : Number,

@@ -17,19 +17,19 @@ exports.home = function(req, res){
 };
 
 exports.all_trips = function(req, res){
-	db.showAllTrips(req, res); 
+	db.showAllTrips(req, res, 'all_trips'); 
 };
 
 exports.all_items = function(req, res){
-	db.showAllItems(req, res); 
+	db.showAllItems(req, res, 'all_items'); 
 };
 
 exports.post_trips = function(req, res){
-	db.display(req, res, 'post_trips')
+	db.display(req, res, 'post_trips');
 };
 
 exports.post_items = function(req, res){
-	db.display(req, res, 'post_items')
+	db.display(req, res, 'post_items');
 };
 
 exports.signup = function(req, res){

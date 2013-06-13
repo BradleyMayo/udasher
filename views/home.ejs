@@ -5,15 +5,7 @@
 		<link rel='stylesheet' href='/stylesheets/style.css' />
 	</head>
 	<body>
-		<div id="user_box" class="clearfix">
-			<form id="logout" action = "/logout" method="GET" >
-				<a href="/user/:id"> <%=facebook.displayName%> </a> |
-				<input class="btn" id="add_btn" type= "submit" value="Logout"></input>
-			</form>
-		</div>
-		
-		
-		
+		<% include header.ejs %>
 		<div class="content">
 			<div id="home" class="clearfix">
 				<h1>Welcome to uDasher</h1>

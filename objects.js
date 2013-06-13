@@ -33,7 +33,7 @@ exports.newUser = function (username, password){
 		email : email,//+
 		password : password,//+
 		
-		name : undefined,//+newName
+		displayName : undefined,//+newName
 
 		trips : [],//designated by unique trip._id
 		items : [],//designated by unique item._id
