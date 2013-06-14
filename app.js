@@ -68,12 +68,12 @@ if ('development' == app.get('env')) {
  
 app.get('/auth/facebook', passport.authenticate('facebook'));
 
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { successRedirect: '/new_user_fb ', failureRedirect: '/auth/facebook' }))
+app.get('/auth/facebook/callback', passport.authenticate('facebook', { successRedirect: '/new_user_fb ', failureRedirect: '/auth/facebook' }));
 
 //Local Routing-----------------------------------------------------
 
 app.get('/', routes.index);
-app.get('/home', routes.home)
+app.get('/home', routes.home);
 app.get('/all_trips', routes.all_trips);
 app.get('/all_items', routes.all_items);
 app.get('/post_trips', routes.post_trips);
@@ -89,3 +89,14 @@ app.post('/new_user', routes.new_user);
 app.post('/new_trip', routes.new_trip);
 app.post('/new_item', routes.new_item);
 
+//Error Handling---------------------------------------------------
+/*
+app.error(function(err, req, res, next){
+	if (err instanceof NotFound){
+		res.render('404.ejs');
+	}
+	else {
+		next(err);
+	}
+});
+*/

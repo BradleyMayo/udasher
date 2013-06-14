@@ -1,7 +1,8 @@
 exports.item = function (){
 	return {
 	
-		trip_id     : String, //designated by unique trip._id
+		trip_id     : String,//designated by unique trip._id
+		picture_id  : String,//designated by unique picture_id
 
 		sender      : Object,//designated by username
 

@@ -1,5 +1,5 @@
 
-body{
+body p{
 	margin: 0; 
 	padding: 0;
 	font-family: Verdana, Geneva, sans-serif; 
@@ -12,59 +12,78 @@ a{
 }
 
 h1{
+	color: #02967A;
 	font-size: 72px; 
 }
 
-.btn{ 
-	border-radius: 10px;
-	box-shadow: 0px 1px 1px rgba(0,0,0,0.1);
+h2{
 	color: #02967A;
-	border: 3px solid rgba(49,124,91, 0.7);
+	font-family: Arial;
+}
+/*********GLOBAL STLYES**************************/
+
+input.box:focus, textarea:focus,select:focus{
+ outline: none; 
+ border:1px solid #09C3FF;
+ -webkit-box-shadow:0 0 6px #06AEAB;
+ -moz-box-shadow:0 0 5px #06AEAB;
+ box-shadow:0 0 5px #06AEAB;
+}
+
+input.box{
+	height: 30px;
+	margin: 0px 0px 10px 0px; 
+	padding-left: 5px; 
+	display: block; 
+	border:1px solid #ccc;
+	border-radius: 2px; 
+	-webkit-box-shadow: 0 0 6px #ccc inset;
+	-moz-box-shadow: 0 0 5px #ccc inset;
+	box-shadow: 0 0 5px #ccc inset;
+}
+
+.btn{ 
+	border-radius: 50px;
+	-webkit-box-shadow:0 0 6px #88918A;
+	-moz-box-shadow:0 0 5px #88918A;
+	box-shadow:0 0 5px #88918A;
+	color: #02967A;
+	border: 2px solid rgba(136,145,138, 0.7);
 	text-align: center;
-	background: rgba(255,255,255,0.2);
+	/* Safari 4-5, Chrome 1-9 */
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dcedf3), to(#fff));
+	/* Safari 5.1, Chrome 10+ */
+	background: -webkit-linear-gradient(top, #dcedf3, #fff);
+	/* Firefox 3.6+ */
+	background: -moz-linear-gradient(top, #dcedf3, #fff);
+	/* IE 10 */
+	background: -ms-linear-gradient(top, #dcedf3, #fff);
+	font-weight: bold;
 }
 
 .content{
 	clear: both;
 	padding: 5px 5px 5px 5px;
 	margin: 0px auto 0 auto;
-	width: 80%; 
+	width: 1280px; 
 	height: 100%; 
 }
 
 #user_box{
-	float: right; 
-	margin: 10px 10px 0 0;
+	padding: 0px 60px 0px 10px; 
+	text-align: right; 
+	width: 1160px;
+	margin: 0px auto 0px auto;
 }
 
-/*****index.ejs*******************************************************/
-#signup{
-	text-align: left;
+#second_logo{
+	display: block; 
+	float: left; 
 }
 
-#login_form{ 
-float: left;
-margin: 0px 50px 0px 0px; 
-}
-
-#submit_btn{
-	margin-top: 5px; 
-	width: 200px;
-	height: 50px;
-}
-
-/*****home.ejs**********************************************************/
-#home{
-	text-align: center;
-	width: 600px;
-	margin: 100px auto; 
-}
-
-#home button{
-	width: 120px;
-	height: 50px;
-	float: left;
-	margin: 80px 10px  0px  10px;
+#username{
+	display: inline-block; 
+	margin: 40px 10px 0px 0px; 
 }
 
 .clearfix:after { 
@@ -76,30 +95,117 @@ margin: 0px 50px 0px 0px;
 }
 
 
+/*****index.ejs*******************************************************/
+
+.login_body{
+	background-image: url(../images/road.jpg);
+	background-repeat: no-repeat; 
+	background-size: cover; 
+}
+
+.main_logo{
+	display: block; 
+	margin: 0 auto 0 auto;   
+}
+
+#login_form_container{
+	overflow: auto; 
+	margin: 0 auto;
+	background-image: url(../images/login_box.png);
+	filter:alpha(opacity=20);
+	background-repeat: no-repeat;
+	width: 1040px;
+	height: 550px;
+
+}
+
+#login_form_container h3{
+	color: #02976A; 
+	font-family: Arial; 
+	font-weight: 100;
+}
+
+.fb_login{
+	margin: 154px 0px 0px 200px;
+}
+
+#login_form{ 
+	color: #02976a;
+	float: left; 
+	margin: 130px 0px 0px 80px; 
+}
+
+#login_form input.box{
+	margin-bottom: 10px;
+}
+
+#login_form p{
+	font-size: 11px; 
+}
+
+#submit_btn{
+	margin: 20px 0px 0px 160px; 
+	height: 40px;
+	width: 100px; 
+}
+
+/*************************signup.ejs***********************************/
+#signup_form{ 
+	float: left; 
+	margin: 85px 0px 0px 80px; 
+}
+
+#signup_form input.box{
+	display: block; 
+	margin-bottom: 10px;
+}
+
+
+/*****home.ejs**********************************************************/
+#home{
+	width: 1210px;
+	text-align: center;
+	margin: 100px auto; 
+}
+
+.home_btn{
+	width: 281px;
+	height: 314px;
+	float: left;
+	margin: 0px 10px  0px  10px;
+}
+
+#post_trips{background-image: url(../images/post_trip.png);}
+#post_items{background-image: url(../images/send_item.png);}
+#all_trips{background-image: url(../images/find_trip.png);}
+#all_items{background-image: url(../images/find_item.png);}
+
 /*****all listings******************************************************/
 
 #all_listings{
-	text-align: left;
+	padding: 10px 20px 0px 40px; 
 }
 
 .trip{
-	padding: 5px;
+	padding: 30px 0px 0px 20px ;
 	margin: 5px;
-	height: 120px;
-	width: 80%;
-	background-color: rgba(2, 160, 163, .4);
+	height: 110px;
+	width: 1000px;
+	border: 2px solid rgba(2, 160, 163, .4);
+	border-radius: 4px; 
 }
 
 /*****post listing*******************************************************/
 
 #post_listing{
-	text-align: left; 
+	padding: 10px 20px 0px 40px; 
 }
 
 
 #add_btn{
-	margin: 15px 0;
-	width: 150px;
+	margin: 20px 0px 0px 0px; 
+	height: 40px;
+	width: 100px;
 }
 
 

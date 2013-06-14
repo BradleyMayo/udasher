@@ -18,7 +18,7 @@ exports.addUserWithEmailAndPassword = function(req, res){
 		if (err) throw err;
 		else if (user == undefined) {
 			newUser.save(function(err){
-				console.log("Adding User: " + req.param('email'));//removable
+				console.log("Adding User With Email And Password: " + req.param('email'));//removable
 				if(err) throw err;	
 				else exports.loginWithEmailAndPassword(req, res);
 			});
@@ -38,7 +38,7 @@ exports.addUserWithFB = function(profile){
 		else if (user != undefined);
 		else{
 			FBuser.save(function(err){
-				console.log("Adding User: " + profile.displayName);//removable
+				console.log("Adding User With Facebook: " + profile.displayName);//removable
 				if(err) throw err;
 			});
 		}

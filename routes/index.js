@@ -51,11 +51,11 @@ exports.login = function(req, res){
 
 exports.new_trip = function(req, res){
 	db.addTrip(req, res);
-}
+};
 
 exports.new_item = function(req, res){
 	db.addItem(req, res);
-}
+};
 
 exports.new_user = function(req, res){
 	db.addUserWithEmailAndPassword(req, res);
@@ -63,11 +63,12 @@ exports.new_user = function(req, res){
 
 exports.new_user_fb = function(req, res){
 	db.loginWithFacebook (req, res); 
-}
+};
 
 exports.logout = function(req, res){
 	req.params.username = undefined;
 	req.params.password = undefined;
 	req.session._id = undefined;
 	res.redirect('/');
-}
+};
+

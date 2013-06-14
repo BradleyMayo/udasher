@@ -1,34 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Udasher</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-  <div class="content">
-  <h1>Sign up to uDasher</h1>
-    <form id="login_form" action = "/new_user" method="POST">
-      <table>
-        <tr>
-          <td width="100px"><label>Email:</label></td>
-          <td><input type="textbox" name = "email"></input><td>
-        </tr>
-        <tr>
-          <td width="100px"><label>Password:</label></td>
-          <td><input type="password" name = "password"></input></td>
-        </tr>
-         <tr>
-          <td width="100px"><label>Display Name</label></td>
-          <td><input type="textbox" name = "displayName"></input></td>
-        </tr>
-        <tr>
-          <td width="100px"><label></label></td>
-          <td><input class="btn" id="add_btn" type= "submit" value="Sign Up"></input></td>
-        </tr>
-      </table>
-    </form>
-    <a href="/auth/facebook"><button class="btn" id="submit_btn" >Login with Facebook</button></a>
-  </div>
-    </div>
-	</body>
+<head>
+	<title><%= "uDahser" %></title>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body class="login_body">
+	<div class="content">
+		<img align="center" class="main_logo" src = "../images/main_logo.png"/>
+		<div id="login_form_container">
+			<form id="signup_form" class="clearfix" action = "/new_user" method="POST">
+			<h3>Sign Up to uDasher</h3>
+			<input class="box" type="textbox" name = "displayName" placeholder="Name" size="30"></input>
+			<input class="box" type="textbox" name = "email" placeholder="Email Address" size="30"></input>
+			<input class="box" type="textbox" name = "email2" placeholder="Confirm Email Address" size="30"></input>
+			<input class="box" type="password" name = "password" placeholder="Password" size="30">
+			</input>
+			<input type="checkbox">I agree to the terms of service</input>
+			<br />
+			<input class="btn" id="submit_btn" type= "submit" value="Sign up"></input>
+			</form>
+			<a href="auth/facebook"><img class="fb_login" src="../images/fb_login.png" /></a>
+			</div>
+	</div>
+</body>
 </html>

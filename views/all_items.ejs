@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= "uDahser" %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <% include header.ejs %>  
-    <div class="content">
-      <div id="all_listings">
-      	<a href="/home"><h1>uDasher</h1></a>
-      	<h2>All Items:</h2>
-      	<% for(var i=0; i<items.length; i++){%>
-        <div class="trip">
-        	<p> Dasher <%=items[i].dasher%><br />
-        		Origin <%=items[i].origin%><br />
-        		Destination <%=items[i].destination%><br />
-        		Cost $<%=items[i].cost%><br /></p>
-        </div>
-      	<%}%>
-      </div>
-   </body>
+	<head>
+		<title><%= "uDahser" %></title>
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+	</head>
+	<body>
+		<% include header.ejs %>  
+		<div class="content">
+			<div id="all_listings">
+				<h2>All Items:</h2>
+				<% for(var i=0; i<items.length; i++){%>
+				<div class="trip">
+					<p> Dasher <%=items[i].dasher%><br />
+						Origin <%=items[i].origin%><br />
+						Destination <%=items[i].destination%><br />
+						Cost $<%=items[i].cost%><br /></p>
+				</div>
+				<%}%>
+			</div>
+	 </body>
 </html>
