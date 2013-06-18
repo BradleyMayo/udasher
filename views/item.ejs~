@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= "uDahser" %></title>
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+	</head>
+	<body>
+		<% include header.ejs %>  
+		<div class="content">
+			<div id="all_listings">
+				<h2>Item: <%=item._id%></h2>
+				<div class="trip">
+			    	<p> Sender: <%=item.sender%><br />
+		    		Origin: <%=item.origin.results[0].formatted_address%><br />
+		    		Destination: <%=item.destination.results[0].formatted_address%><br />
+		    		<img src = <%=image%>><br /></p>
+				</div>
+			</div>
+	 </body>
+</html>
