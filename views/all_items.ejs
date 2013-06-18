@@ -10,12 +10,15 @@
 			<div id="all_listings">
 				<h2>All Items:</h2>
 				<% for(var i=0; i<items.length; i++){%>
-				<div class="trip">
-					<p> Dasher <%=items[i].dasher%><br />
-						Origin <%=items[i].origin%><br />
-						Destination <%=items[i].destination%><br />
-						Cost $<%=items[i].cost%><br /></p>
-				</div>
+				<% var url = "/item/" + items[i]._id%>
+				<a href = <%=url%> >
+					<div class="trip">
+						<p> Sender: <%=items[i].sender%><br />
+							Origin: <%=items[i].origin.results[0].formatted_address%><br />
+							Destination: <%=items[i].destination.results[0].formatted_address%><br />
+						</p>
+					</div>
+				</a>
 				<%}%>
 			</div>
 	 </body>

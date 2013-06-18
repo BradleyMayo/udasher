@@ -2,12 +2,12 @@ exports.item = function (){
 	return {
 	
 		trip_id     : String,//designated by unique trip._id
-		picture_id  : String,//designated by unique picture_id
+		image_id    : String,//designated by unique picture_id
 
 		sender      : Object,//designated by username
 
-		origin      : String,//location(),
-		destination : String,//location(),
+		origin      : Object,//location(),
+		destination : Object,//location(),
 		
 		completed   : Boolean,
 	}
@@ -20,8 +20,8 @@ exports.trip = function (){
 
 		dasher      : Object,
 		
-		origin      : String,//location(),
-		destination : String,//location(),
+		origin      : Object,//location(),
+		destination : Object,//location(),
 
 		cost        : Number,
 		rate        : Number,
@@ -46,22 +46,16 @@ exports.user = function (){
 	}
 }
 
+exports.image = function(){
+	return {
+		image:Object,
+	}
+}
+
 function name(){
 	return {
 	
 		first          : String, 
 		last           : String, 
-	}
-}
-
-function location(){
-	return {
-	
-		country : String,
-		city    : String,
-		state   : String,
-		address : String,
-
-		zip     : Number,
 	}
 }

@@ -1,15 +1,16 @@
 var schemas = require('./schemas'); 
 var objects = require('./objects');
-var mongoose = require('mongoose'); 
+var mongoose = require('mongoose');
+
+var gm = require('googlemaps');
 
 mongoose.connect('mongodb://localhost/udasher'); 
-
 db = mongoose.connection; 
 
 //Collections are plural
-var user = db.model('user', schemas.user()); 
-var trip = db.model('trip', schemas.trip()); 
-var item = db.model('item', schemas.item()); 
+var user  = db.model('user',  schemas.user());
+var trip  = db.model('trip',  schemas.trip());
+var item  = db.model('item',  schemas.item());
 
 exports.addUserWithEmailAndPassword = function(req, res){
 	var newUser = new user({email : req.param('email'), password : req.param('password'), displayName : req.param('displayName')});
@@ -91,22 +92,62 @@ exports.display = function(req, res, route)
 }
 
 exports.addItem = function(req, res){
-	var newItem = new item(objects.newItem(req.param('origin'), req.param('destination'), req.session._id));
-	newItem.save();
-	user.findOne({_id : req.session._id}, function(err, usr){
-		user.trips.push(newItem._id);
-		res.redirect('all_items');
+	gm.geocode(req.param('origin'), function(err, originResults){
+		if (err) throw err;
+
+		gm.geocode(req.param('destination'), function(error, destinationResults){
+			if (error) throw error;
+
+			var newItem = new item(objects.newItem(originResults, destinationResults, req.session._id));
+			newItem.save();
+			user.findOne({_id : req.session._id}, function(err, usr){
+				if (err) throw err;
+				else{
+					usr.items.push(newItem._id);
+					res.redirect('all_items');
+				}
+			});		
+		});
 	});
+
+
+	
 }
 
-exports.addTrip = function(req, res){
-	var newTrip = new trip(objects.newTrip(req.param('origin'), req.param('destination'), req.param('cost'), req.param('rate'), req.session._id));
-	newTrip.save();
-	user.findOne({_id : req.session._id}, function(err, usr){
-		usr.trips.push(newTrip._id);
-		res.redirect('all_trips');
-	});
+exports.showItem = function(req, res, route){
+	item.findOne({_id : req.param('item_id')}, function(err, itm){
+		if (err) throw err;
+		else if (itm == undefined){
+			console.log('ITEM NOT FOUND: database.showItem');
+		}
+		else {
+			markers = [
+				{ 'location': itm.origin.results[0].formatted_address },
+				{ 'location': itm.destination.results[0].formatted_address,
+					'color': 'red',
+					'label': 'A',
+					'shadow': 'false',
+					'icon' : 'http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=cafe%7C996600'
+				}
+			]
 
+			styles = [
+				{ 'feature': 'road', 'element': 'all', 'rules': 
+					{ 'hue': '0x00ff00' }
+				}
+			]
+
+			paths = [
+				{ 'color': '0x0000ff', 'weight': '5', 'points': 
+					[ itm.origin.results[0].geometry.location.lat + "," + itm.origin.results[0].geometry.location.lng, itm.destination.results[0].geometry.location.lat + "," + itm.destination.results[0].geometry.location.lng]
+				}
+			]
+		
+			var imgURL = gm.staticMap(undefined, undefined,'500x400', false, false, 'roadmap', undefined, styles, paths);
+				
+			res.render(route, {displayName: req.session.displayName, item : itm, image : imgURL});
+		}
+	});
 }
 
 exports.showAllItems = function(req, res, route){
@@ -118,44 +159,68 @@ exports.showAllItems = function(req, res, route){
 	});	
 }
 
+exports.addTrip = function(req, res){
+	gm.geocode(req.param('origin'), function(err, originResults){
+		if (err) throw err;
+
+		gm.geocode(req.param('destination'), function(error, destinationResults){
+			if (error) throw error;
+
+			var newTrip = new trip(objects.newTrip(originResults, destinationResults, req.param('cost'), req.param('rate'), req.session._id));
+			newTrip.save();
+			user.findOne({_id : req.session._id}, function(err, usr){
+				if (err) throw err;
+				else {
+					usr.trips.push(newTrip._id);
+					res.redirect('all_trips');
+				}
+			});
+		});
+	});
+
+}
+
+exports.showTrip = function(req, res, route){
+	trip.findOne({_id : req.param('trip_id')}, function(err, trp){
+		if (err) throw err;
+		else if (trp == undefined){
+			console.log('ITEM NOT FOUND: database.showItem');
+		}
+		else {
+			markers = [
+				{ 'location': trp.origin.results[0].formatted_address },
+				{ 'location': trp.destination.results[0].formatted_address,
+					'color': 'red',
+					'label': 'A',
+					'shadow': 'false',
+					'icon' : 'http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=cafe%7C996600'
+				}
+			]
+
+			styles = [
+				{ 'feature': 'road', 'element': 'all', 'rules': 
+					{ 'hue': '0x00ff00' }
+				}
+			]
+
+			paths = [
+				{ 'color': '0x0000ff', 'weight': '5', 'points': 
+					[ trp.origin.results[0].geometry.location.lat + "," + trp.origin.results[0].geometry.location.lng, trp.destination.results[0].geometry.location.lat + "," + trp.destination.results[0].geometry.location.lng]
+				}
+			]
+		
+			var imgURL = gm.staticMap(undefined, undefined,'500x400', false, false, 'roadmap', undefined, styles, paths);
+			res.render(route, {displayName: req.session.displayName, trip : trp, image : imgURL});
+		}
+	});
+}
+
 exports.showAllTrips = function(req, res, route){
 	trip.find(function(err, trips){
-		if (err) throw err; 
+		if (err) throw err;
 		else{
 			res.render(route, {displayName: req.session.displayName, trips: trips});
 		}
 	});	
 }
-
-/*May be needed in the future but needs rethinking. For now all add and get function automaticall save sessions
-function setSession(req, res, method){
-	db.users.find({email: req.param('email'), password: req.param('password')}, function(err, users){
-		if (err) throw err;
-		else if (users[0] == undefined) {
-			console.log('USER NOT FOUND: database.setSession');
-		}
-		else {
-			req.session._id = users[0]._id;
-			req.session.save();
-		}
-	});
-}
-*/
-/*Debatably useless...need more time to determine
-
-exports.loginWithSession = function(req, res){
-	user.findOne({'facebook.id': profile.id}, function(err, user){
-		if (err) throw err; 
-		else if(user == undefined){
-			console.log('USER NOT FOUND: database.setSession');
-		}
-		else {
-			req.session._id = user._id;
-			req.session.save();
-			res.redirect('/');
-		}
-	});
-}
-*/
-
 

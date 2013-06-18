@@ -20,12 +20,22 @@ exports.all_trips = function(req, res){
 	db.showAllTrips(req, res, 'all_trips'); 
 };
 
-exports.all_items = function(req, res){
-	db.showAllItems(req, res, 'all_items'); 
+exports.trip = function(req, res){
+	req.params.trip_id = req.params.id;
+	db.showTrip(req, res, 'trip');
 };
 
 exports.post_trips = function(req, res){
 	db.display(req, res, 'post_trips');
+};
+
+exports.all_items = function(req, res){
+	db.showAllItems(req, res, 'all_items'); 
+};
+
+exports.item = function(req, res){
+	req.params.item_id = req.params.id;
+	db.showItem(req, res, 'item');
 };
 
 exports.post_items = function(req, res){

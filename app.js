@@ -81,6 +81,8 @@ app.get('/post_items', routes.post_items);
 app.get('/signup', routes.signup);
 app.get('/logout', routes.logout);
 app.get('/new_user_fb', routes.new_user_fb);
+app.get('/trip/:id', routes.trip);
+app.get('/item/:id', routes.item);
 
 //Local Data Handling----------------------------------------------
 

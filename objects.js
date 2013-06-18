@@ -2,6 +2,7 @@
 exports.newItem = function (origin, destination, sender){
 	return {
 		trip_id : undefined,//designated by unique trip._id
+		image_id : undefined,//+
 
 		sender : sender,//designated by username
 
@@ -40,13 +41,9 @@ exports.newUser = function (username, password){
 	}
 }
 
-exports.newLocation = function (country, city, state, zip, address){
+exports.newImage = function (image){
 	return {
-		country: country,//+
-		city: city,//+
-		state: state,//+
-		zip: zip,//+
-		address: address,//+
+		image: image,	
 	}
 }
 

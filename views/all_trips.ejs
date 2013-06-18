@@ -10,13 +10,16 @@
 			<div id="all_listings">
 				<h2>All Trips:</h2>
 				<% for(var i=0; i<trips.length; i++){%>
-				<div class="trip">
-    		    	<p> Dasher <%=trips[i].dasher%><br />
-    	    		Origin <%=trips[i].origin%><br />
-    	    		Destination <%=trips[i].destination%><br />
-    	    		Cost $<%=trips[i].cost%><br />
-					Rate <%=trips[i].rate%><br /></p>
-				</div>
+				<% var url = "/trip/" + trips[i]._id%>
+				<a href = <%=url%>>
+					<div class="trip">
+				    	<p> Dasher: <%=trips[i].dasher%><br />
+			    		Origin: <%=trips[i].origin.results[0].formatted_address%><br />
+			    		Destination: <%=trips[i].destination.results[0].formatted_address%><br />
+			    		Cost: $<%=trips[i].cost%><br />
+						Rate: <%=trips[i].rate%><br /></p>
+					</div>
+				</a>
 				<%}%>
 			</div>
 		</div>
