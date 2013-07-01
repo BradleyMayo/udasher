@@ -83,6 +83,7 @@ app.get('/logout', routes.logout);
 app.get('/new_user_fb', routes.new_user_fb);
 app.get('/trip/:id', routes.trip);
 app.get('/item/:id', routes.item);
+app.get('/attach_item/:trpid/:itmid', routes.attach_item);
 
 //Local Data Handling----------------------------------------------
 
@@ -102,3 +103,6 @@ app.error(function(err, req, res, next){
 	}
 });
 */
+
+
+app.get('/test', routes.test);

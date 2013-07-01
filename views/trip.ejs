@@ -15,8 +15,20 @@
 		    		Destination: <%=trip.destination.results[0].formatted_address%><br />
 		    		Cost: $<%=trip.cost%><br />
 					Rate: <%=trip.rate%><br />
-					<img src = <%=image%>><br /></p>
 				</div>
+				<div class="trip2"><p>Items Being Dashed:</p>
+				<% for(var i=0; i<trip.items.length; i++){%>
+				<% var url = "/item/" + trip.items[i]%>
+				<a href = <%=url%> > item_id: <%=trip.items[i]%> </a><br />
+				<%}%>
+				</div>
+				<div class="trip2"><p>Your Unsent Items:</p>
+				<% for(var i=0; i<items.length; i++){%>
+				<% var url = "/attach_item/" + trip._id + "/" + items[i]._id%>
+				<a href = <%=url%> > item_id: <%=items[i]._id%> </a><br />
+				<%}%>
+				</div>
+				<img src = <%=image%> />
 			</div>
 		</div>
 	</body>

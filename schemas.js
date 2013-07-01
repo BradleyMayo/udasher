@@ -1,15 +1,20 @@
 exports.item = function (){
 	return {
 	
-		trip_id     : String,//designated by unique trip._id
-		image_id    : String,//designated by unique picture_id
+		trip_id      : Object,//designated by unique trip._id
+		image_id     : String,//designated by unique picture_id
 
-		sender      : Object,//designated by username
+		sender       : Object,//designated by username
 
-		origin      : Object,//location(),
-		destination : Object,//location(),
+		origin       : Object,//location(),
+		destination  : Object,//location(),
+	
+		name         : String,
+		description  : String,
 		
-		completed   : Boolean,
+		upload_Date  : Date,
+		desired_Date : Date,
+		completed    : Boolean,//should be date
 	}
 }
 
@@ -20,13 +25,13 @@ exports.trip = function (){
 
 		dasher      : Object,
 		
-		origin      : Object,//location(),
-		destination : Object,//location(),
+		origin      : Object,
+		destination : Object,
 
 		cost        : Number,
 		rate        : Number,
 		
-		completed   : Boolean,
+		completed   : Boolean,//should be date
 	}
 }
 

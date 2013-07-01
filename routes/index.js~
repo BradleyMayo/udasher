@@ -38,6 +38,12 @@ exports.item = function(req, res){
 	db.showItem(req, res, 'item');
 };
 
+exports.attach_item = function(req, res){
+	req.params.item_id = req.params.itmid;
+	req.params.trip_id = req.params.trpid;
+	db.attachItem(req, res, 'trip/' + req.params.trip_id);
+};
+
 exports.post_items = function(req, res){
 	db.display(req, res, 'post_items');
 };
@@ -80,5 +86,17 @@ exports.logout = function(req, res){
 	req.params.password = undefined;
 	req.session._id = undefined;
 	res.redirect('/');
+};
+
+
+
+
+
+
+
+
+
+exports.test = function(req, res){
+	db.test(req, res);
 };
 
