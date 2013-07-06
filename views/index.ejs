@@ -1,22 +1,147 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title><%= "uDahser" %></title>
-	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<%include head.ejs %>
 </head>
-<body class="login_body">
-	<div class="content">
-		<img align="center" class="main_logo" src = "../images/main_logo.png"/>
-		<div id="login_form_container">
-			<form id="login_form" class="clearfix" action = "/login" method="POST">
-			<h3>Login to uDasher</h3>
-			<input class="box" type="textbox" name = "email" placeholder="Email Address" size="30"></input>
-			<input class="box" type="password" name = "password" placeholder="Password" size="30"></input>
-			<p>Need an account? <a href="/signup"><strong>Sign Up</strong></a></p>
-			<input class="btn" id="submit_btn" type= "submit" value="Login"></input>
-			</form>
-			<a href="auth/facebook"><img class="fb_login" src="../images/fb_login.png" /></a>
+	<body>
+		<% include navbar.ejs %>
+		<div class="container">
+
+			<!-- Tabs
+			============================================================= -->
+			<div id="homeTopContent" class="row-fluid">
+				
+				<div class="span4">
+					<div class="tabbable">
+						<ul class="nav nav-tabs">
+							<li class="active"><a href="#pane1" data-toggle="tab">Find Trip</a></li>
+							<li><a href="#pane2" data-toggle="tab">Find Item</a></li>
+						</ul>
+						<div class="tab-content">
+							<div id="pane1" class="tab-pane active">
+								<form action="/find_trips" method="POST">
+									<fieldset>
+										<label>Origin:</label>
+										<input class="textbox" type="text" placeholder="Trip Origin" name="origin"></input><br />
+										<label>Destination:</label>
+										<input class="textbox" type="text" placeholder="Trip Destination" name="destination"></input><br />
+										<select class="select">
+										<option>Flex Week</option>
+										<option>Flex Month</option>
+										</select><br />
+										<input class="date" type="date"></input><br />
+										<input type="submit" class="btn-primary" value="Find Trips"></input>
+									</fieldset>
+								</form>
+							</div>
+							<div id="pane2" class="tab-pane">
+								<form action="/find_items" method="POST">
+									<fieldset>
+										<label>Origin:</label>
+										<input class="textbox" type="text" placeholder="Item Origin" name="origin"></input><br />
+										<label>Destination:</label>
+										<input class="textbox" type="text" placeholder="Item Destination" name="destination"></input><br />
+										<select class="select">
+										<option>Flex Week</option>
+										<option>Flex Month</option>
+										</select><br />
+										<input class="date" type="date"></input><br />
+										<input type="submit" class="btn-primary" value="Find Items"></input>
+									</fieldset>
+								</form>
+							</div>
+						</div><!-- /.tab-content -->
+					</div><!-- /.tabbable -->
+				</div>
+
+				<div class="span8">
+					<img src="http://placehold.it/740x350" />
+				</div>
+
+			</div><!-- /row-->
+
+			<div class="gutter"></div>
+			<div class="row"><img class="social_media" src="./img/social_media.jpg" /></div>
+			<div class="gutter"></div>
+
+			<div id="homeMidContent" class="row">
+				<div class="span7">
+					<img src="http://placehold.it/500x300" />
+				</div>
+				<div class="span5">
+					<h2>Don't Ship It. Dash it.</h2>
+					<p>uDasher is short for “use Dasher”. Dasher was part of the most efficient delivery system known to man. With his team he was able to deliver packages to every household throughout the world in just one night. Dasher was never appropriately recognized for his efforts, and has since broken out on his own to show the world what he can do. Now you have the opportunity to use Dasher to send your hockey sticks, your coffee table, any other awkward items you have that need to go somewhere. You can also use Dasher to make money on the trips you’re already taking, or to make it possible to go other places cheaper.</p>
+				</div>
 			</div>
-	</div>
-</body>
+		</div> <!-- /container -->
+
+		<div id="footer">
+			<div class="container">
+				<div class="row">
+					<div class="span4 offset7">
+					<ul class="nav nav-list">
+  					<li class="footerNavItem"><a href="#">Home</a></li>
+  					<li class="divider"></li>
+  					<li class="footerNavItem"> <a href="#">About</a></li>
+  					<li class="divider"></li>
+  					<li class="footerNavItem"><a href="#">Contact</a></li>
+  					<li class="divider"></li>
+					</ul>
+					</div>
+			 </div>
+		 </div>
+		</div>
+
+		<!-- Login Modal
+		===================================================== -->
+		<div id="loginModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    <h3 id="myModalLabel">Login</h3>
+		  </div>
+		  <div class="modal-body">
+				<form id="loginForm" class="clearfix" action = "/login" method="POST">
+				<input class="textbox" type="text" name = "email" placeholder="Email Address" size="30">
+				</input></br />
+				<input class="textbox" type="password" name = "password" placeholder="Password" size="30">
+				</input>
+				</form>
+		  </div>
+		  <div class="modal-footer">
+		    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		    <button id="loginFormSubmit" class="btn btn-primary">Login</button>
+		  </div>
+		</div>
+
+
+		<!-- Le javascript
+		================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="./js/jquery.js"></script>
+		<script src="./js/bootstrap-transition.js"></script>
+		<script src="./js/bootstrap-alert.js"></script>
+		<script src="./js/bootstrap-modal.js"></script>
+		<script src="./js/bootstrap-dropdown.js"></script>
+		<script src="./js/bootstrap-scrollspy.js"></script>
+		<script src="./js/bootstrap-tab.js"></script>
+		<script src="./js/bootstrap-tooltip.js"></script>
+		<script src="./js/bootstrap-popover.js"></script>
+		<script src="./js/bootstrap-button.js"></script>
+		<script src="./js/bootstrap-collapse.js"></script>
+		<script src="./js/bootstrap-carousel.js"></script>
+		<script src="./js/bootstrap-typeahead.js"></script>
+		<script src="./js/bootstrap-datepicker.js"></script>
+
+		<!-- Custom Scripts -->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('.datepicker').datepicker('')
+				$("#loginFormSubmit").click(function() {
+				$("form#loginForm").submit();
+			});
+		});
+		</script>
+
+
+	</body>
 </html>

@@ -1,6 +1,7 @@
 var schemas = require('./schemas');
 var objects = require('./objects');
 var mongoose = require('mongoose');
+var async = require('async');
 
 var gm = require('googlemaps');
 
@@ -8,37 +9,26 @@ mongoose.connect('mongodb://localhost/udasher');
 db = mongoose.connection;
 
 var itemSchema = new mongoose.Schema(schemas.item());
+var tripSchema = new mongoose.Schema(schemas.trip());
 
-itemSchema.method('findTotalDistance', function(startLocation, endLocation, callback){
-//	console.log("ITEM ORIGIN: " + this.origin.results[0].formatted_address);
-//	console.log("ITEM DESTIN: " + this.destination.results[0].formatted_address);
-	
+itemSchema.method('findTotalDistance', findTotalDistance);
+tripSchema.method('findTotalDistance', findTotalDistance);
+
+function findTotalDistance(startLocation, endLocation, callback){
 	var location1 = this.origin.results[0].formatted_address;
 	var location2 = this.destination.results[0].formatted_address;
 
 	gm.distance(location1, startLocation, function(err, dst1){
-//		console.log("ORG DIST: " + dst1.rows[0].elements[0].distance.value/1000);
 		gm.distance(location2, endLocation, function(err, dst2){
-//			console.log("DES DIST: " + dst2.rows[0].elements[0].distance.value/1000);
 			callback(dst1.rows[0].elements[0].distance.value/1000 + dst2.rows[0].elements[0].distance.value/1000);
 		});
 	});
-});
+}
 
 //Collections are plural
-var user  = db.model('user',  schemas.user());
-var trip  = db.model('trip',  schemas.trip());
-var item  = db.model('item',  itemSchema);
-
-exports.test = function(req, res){
-	item.find().sort('-this.findTotalDistance("Las Vegas, Nevada", "Oklahoma City, OK")').exec(function(err, itm){
-		itm[0].findTotalDistance("Las Vegas, Nevada", "Oklahoma City, OK", console.log);
-		itm[1].findTotalDistance("Las Vegas, Nevada", "Oklahoma City, OK", console.log);
-		itm[2].findTotalDistance("Las Vegas, Nevada", "Oklahoma City, OK", console.log);
-		itm[3].findTotalDistance("Las Vegas, Nevada", "Oklahoma City, OK", console.log);
-//		console.log(itm);
-	});
-};
+var user  = db.model('user', schemas.user());
+var trip  = db.model('trip', tripSchema);
+var item  = db.model('item', itemSchema);
 
 exports.addUserWithEmailAndPassword = function(req, res){
 	var newUser = new user({email : req.param('email'), password : req.param('password'), displayName : req.param('displayName')});
@@ -76,7 +66,7 @@ exports.addUserWithFB = function(profile){
 
 exports.loginWithFacebook = function(req, res){
 	user.findOne({'facebook.id': req.user}, function(err, user){
-		if(err) throw err; 
+		if(err) throw err;
 		else{
 			console.log("Facebook Profile Found, logging in.");//removable
 			req.session._id = user._id; 
@@ -112,6 +102,7 @@ exports.display = function(req, res, route)
 		if(err) throw err; 
 		else if(user == undefined){
 			console.log('USER NOT FOUND: database.setSession');
+			res.render(route, {displayName: req.session.displayName, user: user}); 			
 		}
 		else{
 			res.render(route, {displayName: req.session.displayName, user: user}); 
@@ -132,14 +123,11 @@ exports.addItem = function(req, res){
 				if (err) throw err;
 				else{
 					usr.items.push(newItem._id);
-					res.redirect('all_items');
+					res.redirect('/find_items');
 				}
 			});		
 		});
 	});
-
-
-	
 };
 
 exports.showItem = function(req, res, route){
@@ -200,7 +188,7 @@ exports.addTrip = function(req, res){
 				if (err) throw err;
 				else {
 					usr.trips.push(newTrip._id);
-					res.redirect('all_trips');
+					res.redirect('/find_trips');
 				}
 			});
 		});
@@ -229,9 +217,24 @@ exports.showAllTrips = function(req, res, route){
 	trip.find(function(err, trips){
 		if (err) throw err;
 		else{
+			for(var i=0; i<trips.length; i++){
+				console.log(trips[i].origin.formatted_address);
+			}
 			res.render(route, {displayName: req.session.displayName, trips: trips});
 		}
 	});	
+};
+
+exports.showSortedTrips = function(req, res, route){
+	getClosestTrips(req, res, {origin : req.param('origin'), destination : req.param('destination')}, function(sortedList){
+		res.render(route, {displayName : req.session.displayName, trips : sortedList, query_location : {origin : req.param('origin'), destination : req.param('destination')}});
+	});
+};
+
+exports.showSortedItems = function(req, res, route){
+	getClosestItems(req, res, {origin : req.param('origin'), destination : req.param('destination')}, function(sortedList){
+		res.render(route, {displayName : req.session.displayName, items : sortedList});
+	}); 
 };
 
 //testing////////////////////////////////////////////////////////
@@ -279,7 +282,8 @@ function findItemProperties(req, res, trp, route){
 			}
 		});
 	});
-}	
+}
+
 function getDirections(req, res, trp, waypoints, route){
 	console.log(	gm.directions((trp.origin.results[0].geometry.location.lat + "," + trp.origin.results[0].geometry.location.lng), (trp.destination.results[0].geometry.location.lat + "," + trp.destination.results[0].geometry.location.lng), function(err, directions){
 		if (err) throw err;
@@ -311,6 +315,31 @@ function getDirections(req, res, trp, waypoints, route){
 }
 
 function getClosestItems(req, res, location, callback){
-	item.find({completed : undefined}).where();
+	item.find({completed : false}).exec(function(err, itm){
+		sort(itm, location, callback);
+	});
+}
+
+function getClosestTrips(req, res, location, callback){
+	trip.find({completed : false}).exec(function(err, trp){
+		sort(trp, location, callback);
+	});
+}
+
+function sort(list, location, callback){
+	var array = [];
+	async.forEach(list, function(itm, callback){
+		itm.findTotalDistance(location.origin, location.destination, function(dist){
+			itm.distance = dist;
+			array.push(itm);	
+			callback();
+		});
+	}, function(err){
+		if (err) return next(err);
+	
+		callback(array.sort(function(a, b){
+			return a.distance - b.distance;
+		}));
+	});
 }
 

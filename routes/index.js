@@ -6,31 +6,29 @@ var fbStrategy = require('passport-facebook').Strategy;
 
 exports.index = function(req, res){
 	console.log("Session number: " + req.session._id);//removable
-	if (req.session._id != undefined) {
-		exports.home(req, res);
-	}
-	else res.render('index', {title: 'uDasher' });
+	db.display(req, res, 'index');
 };
 
-exports.home = function(req, res){
-	db.display(req, res, 'home'); 
-};
-
-exports.all_trips = function(req, res){
-	db.showAllTrips(req, res, 'all_trips'); 
+exports.find_trips = function(req, res){
+	db.showAllTrips(req, res, 'find_trips'); 
 };
 
 exports.trip = function(req, res){
+	if (req.session._id == undefined){
+		res.redirect('/signup');
+	}
+	else{
 	req.params.trip_id = req.params.id;
 	db.showTrip(req, res, 'trip');
+	}
 };
 
 exports.post_trips = function(req, res){
 	db.display(req, res, 'post_trips');
 };
 
-exports.all_items = function(req, res){
-	db.showAllItems(req, res, 'all_items'); 
+exports.find_items = function(req, res){
+	db.showAllItems(req, res, 'find_items'); 
 };
 
 exports.item = function(req, res){
@@ -49,8 +47,12 @@ exports.post_items = function(req, res){
 };
 
 exports.signup = function(req, res){
-	res.render('signup');
+	db.display(req, res, 'signup');
 };
+
+exports.login_page = function(req, res){
+	db.display(req, res, 'login')
+}
 
 exports.login = function(req, res){
 	if (req.param('email') != undefined && req.param('password') != undefined){
@@ -81,22 +83,19 @@ exports.new_user_fb = function(req, res){
 	db.loginWithFacebook (req, res); 
 };
 
+exports.sort_trips = function(req, res){
+	db.showSortedTrips(req, res, 'find_trips');
+};
+
+exports.sort_items = function(req, res){
+	db.showSortedItems(req, res, 'find_items');
+};
+
 exports.logout = function(req, res){
 	req.params.username = undefined;
 	req.params.password = undefined;
 	req.session._id = undefined;
+	req.session.displayName = undefined; 
 	res.redirect('/');
-};
-
-
-
-
-
-
-
-
-
-exports.test = function(req, res){
-	db.test(req, res);
 };
 

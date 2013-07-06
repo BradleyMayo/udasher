@@ -1,20 +1,132 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
-		<title><%= "uDahser" %></title>
-		<link rel='stylesheet' href='/stylesheets/style.css' />
+		<meta charset="utf-8">
+		<title>uDasher</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<!-- styles -->
+		<link href="../css/bootstrap.css" rel="stylesheet">
+		<link href="../css/custom.css" rel="stylesheet">
+		<link href="../css/bootstrap-responsive.css" rel="stylesheet">
+
+		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+		<!--[if lt IE 9]>
+			<script src="./js/html5shiv.js"></script>
+		<![endif]-->
+
 	</head>
+
 	<body>
-		<% include header.ejs %>  
-		<div class="content">
-			<div id="all_listings">
-				<h2>Item: <%=item._id%></h2>
-				<div class="trip">
-			    	<p> Sender: <%=item.sender%><br />
-		    		Origin: <%=item.origin.results[0].formatted_address%><br />
-		    		Destination: <%=item.destination.results[0].formatted_address%><br />
-		    		<img src = <%=image%>><br /></p>
+		
+		<!-- Navbar
+		============================================================= -->
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container">
+					<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="brand" href="/">uDasher</a>
+					<div class="nav-collapse collapse">
+						<ul class="nav pull-right">
+							<li><a href="/post_trips">Post Trip</a></li>
+							<li><a href="/post_items">Post Item</a></li>
+							<%if(displayName != undefined) { %>
+							<li class="dropdown"><a href="#" class="dropdown-toggle pull-right" data-toggle="dropdown">
+								<%=displayName%><b class="caret"></b></a>
+									<ul class="dropdown-menu">
+									<li> <a href="#">Edit Profile</a></li>
+									<li> <a href="/logout">Logout</a></li>
+									</ul>
+							</li>
+							<% } 
+							else{ %>
+							<li ><a href="#loginModal" data-toggle="modal">Login</a></li>
+							<% } %>
+						</ul>
+					</div><!--/.nav-collapse -->
 				</div>
 			</div>
-	 </body>
+		</div>
+
+		<div class="container">
+			<div class="row">
+			<div id="searchBar" class="navbar">
+				<div class="navbar-inner">
+					<form class="navbar-form listing-search">
+						<fieldset>
+							<input type="text" placeholder="Trip Origin"></input>
+							<input type="text" placeholder="Trip Destination"></input>
+							<input class="date" type="date"></input>
+							<input type="submit" class="btn btn-primary" value="Find Trips"></input>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+		</div>
+
+		<div class="container">
+			<div class="row">
+				<div class="span6">
+					<div class="trip">
+						<a href="#" id="user-info" class="profile-pic img-polaroid" rel="popover" title="Display Name" 
+						data-content="<h5>This guy is a total dick.</h5>" 
+						data-html="true"
+						data-placement="left">
+							<img src="../img/item_default.png" />
+						</a>
+						<div class="info">
+							<h2><%=item.origin.results[0].formatted_address%></h2>
+							<h2><%=item.destination.results[0].formatted_address%></h2>
+							<h3>Date: 6/25/2013</h3>
+						</div>
+					</div>
+				</div>
+				<div class="span4 offset2">
+					<div class="well cost-box">
+						<h4>Price: </h4>
+						<h2>$Null</h2> 
+					</div>
+				</div>
+			</div>
+			
+		</div>
+
+
+
+		<!-- Le javascript
+		================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="../js/jquery.js"></script>
+		<script src="../js/bootstrap-transition.js"></script>
+		<script src="../js/bootstrap-alert.js"></script>
+		<script src="../js/bootstrap-modal.js"></script>
+		<script src="../js/bootstrap-dropdown.js"></script>
+		<script src="../js/bootstrap-scrollspy.js"></script>
+		<script src="../js/bootstrap-tab.js"></script>
+		<script src="../js/bootstrap-tooltip.js"></script>
+		<script src="../js/bootstrap-popover.js"></script>
+		<script src="../js/bootstrap-button.js"></script>
+		<script src="../js/bootstrap-collapse.js"></script>
+		<script src="../js/bootstrap-carousel.js"></script>
+		<script src="../js/bootstrap-typeahead.js"></script>
+
+					<!-- Custom Form -->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#user-info').popover();
+				$('#user-info').onclick = function(){
+					$('#filterSearch').hide(); 
+				};
+			});
+
+		</script>
+
+	</body>
 </html>

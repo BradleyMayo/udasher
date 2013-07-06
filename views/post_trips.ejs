@@ -1,26 +1,97 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
-		<title>uDasher</title>
-		<link rel='stylesheet' href='/stylesheets/style.css' />
+		<%include head.ejs%>
 	</head>
-	<body>
-		<% include header.ejs %>
-		<div class = "content">
-			<div id="post_listing">
-				<h2>Post a Trip:</h2>
-				<form action = "/new_trip" method="POST">
-						<p>Origin:</p>
-						<input class="box" name ="origin" type="textbox" size=40 placeholder ="New York"></input>
-						<p>Destination:</p>
-						<input class="box" name="destination" type="textbox" size=40 placeholder ="State College"></input>
-						<p>Cost:</p>
-						<input class="box" name="cost" type="textbox" size=5 placeholder ="20"></input>
-						<p>Rate:</p>
-						<input class="box" name="rate" type="textbox" size=5 placeholder ="5"></input>
-						<input class="btn" id="add_btn" type= "submit" value="Enter"></input>
-				</form>
+
+<body>
+	<% include navbar %>
+
+	<div class="container">
+	    <div class="row">
+	    <div class="span7">
+	      <form id="postTrip" action="/new_trip" method="POST">
+	      	<legend>Post a Trip</legend>
+	      	<label>Trip Origin</label>
+	      	<input type="text" name="originAddress" placeholder="Street Address"></input><br />
+	      	<input type="text" name="origin" placeholder="City"></input>
+			<select class="input-small">
+				<option>PA</option>
+				<option>NY</option>
+				<option>MD</option>
+				<option>NJ</option>
+				<option>MA</option>
+			</select>
+			<input  class="input-small" type="text" name="originZip" placeholder="Zip Code"></input/>
+
+	      	<label>Trip Destination</label>
+	      	<input type="text" name="destinationAddress" placeholder="Street Address"></input><br />
+	      	<input type="text" name="destination" placeholder="City"></input>
+			<select class="input-small">
+				<option>PA</option>
+				<option>NY</option>
+				<option>MD</option>
+				<option>NJ</option>
+				<option>MA</option>
+			</select>
+			<input  class="input-small" type="text" name="originZip" placeholder="Zip Code"></input/>
+			<label>Trip Cost</label>
+			<div class="form-inline">
+		      	<input class="input-small" type="text" name="cost" placeholder="Cost"></input>
+		      	<input class="input-small" type="text" name="rate" placeholder="Rate"></input><br />
+		      	<input type="submit" class="btn"></input>
+	      	</div>
+	      </form>
+	  	</div>
+
+	  	<div class="span4 offset1">
+			<ul class="nav nav-list">
+				<li class="nav-header">Frequently Asked Questions</li>
+				<li ><a href="#">What's the risk?</a></li>
+				<li><a href="#">How do I get paid?</a></li>
+				<li><a href="#">Who developed this great site?</a></li>
+				<li><a href="#">You can hire them if you want.</a></li>
+				<li><a href="#">Really, they need a job.</a></li>
+
+			</ul>
+	  	</div>
+	    </div> 
+	</div> <!-- /container -->
+
+	<div id="footer">
+	<div class="container">
+		<div class="row">
+			<div class="span4 offset7">
+			<ul class="nav nav-list">
+				<li class="footerNavItem"><a href="#">Home</a></li>
+				<li class="divider"></li>
+				<li class="footerNavItem"><a href="#">About</a></li>
+				<li class="divider"></li>
+				<li class="footerNavItem"><a href="#">Contact</a></li>
+				<li class="divider"></li>
+			</ul>
 			</div>
-		</div>
-	 </body>
+	 	</div>
+	</div>
+	</div>
+
+
+		<!-- Le javascript
+		================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="./js/jquery.js"></script>
+		<script src="./js/bootstrap-transition.js"></script>
+		<script src="./js/bootstrap-alert.js"></script>
+		<script src="./js/bootstrap-modal.js"></script>
+		<script src="./js/bootstrap-dropdown.js"></script>
+		<script src="./js/bootstrap-scrollspy.js"></script>
+		<script src="./js/bootstrap-tab.js"></script>
+		<script src="./js/bootstrap-tooltip.js"></script>
+		<script src="./js/bootstrap-popover.js"></script>
+		<script src="./js/bootstrap-button.js"></script>
+		<script src="./js/bootstrap-collapse.js"></script>
+		<script src="./js/bootstrap-carousel.js"></script>
+		<script src="./js/bootstrap-typeahead.js"></script>
+
+	</body>
 </html>

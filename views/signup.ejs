@@ -1,26 +1,44 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<title><%= "uDahser" %></title>
-	<link rel='stylesheet' href='/stylesheets/style.css' />
-</head>
-<body class="login_body">
-	<div class="content">
-		<img align="center" class="main_logo" src = "../images/main_logo.png"/>
-		<div id="login_form_container">
-			<form id="signup_form" class="clearfix" action = "/new_user" method="POST">
-			<h3>Sign Up to uDasher</h3>
-			<input class="box" type="textbox" name = "displayName" placeholder="Name" size="30"></input>
-			<input class="box" type="textbox" name = "email" placeholder="Email Address" size="30"></input>
-			<input class="box" type="textbox" name = "email2" placeholder="Confirm Email Address" size="30"></input>
-			<input class="box" type="password" name = "password" placeholder="Password" size="30">
-			</input>
-			<input type="checkbox">I agree to the terms of service</input>
-			<br />
-			<input class="btn" id="submit_btn" type= "submit" value="Sign up"></input>
-			</form>
-			<a href="auth/facebook"><img class="fb_login" src="../images/fb_login.png" /></a>
-			</div>
+<html lang="en">
+	<head>
+		<%include head.ejs%>
+	</head>
+
+<body>
+	<% include navbar %>
+
+	<div class="container">
+	    <div class="row">
+	    <div class="span6 center">
+	      <form action="/new_user" method="POST" class="form-signin">
+	        <h2 class="form-signin-heading">Please sign in</h2>
+	        <input type="text" class="input-block-level" name="displayName" placeholder="Full Name">
+	        <input type="text" class="input-block-level" name="email" placeholder="Email address">
+	        <input type="password" class="input-block-level" name="password" placeholder="Password">
+	        <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+	      </form>
+	  	</div>
+	    </div>
+	    </div> <!-- /container -->
 	</div>
-</body>
+
+
+		<!-- Le javascript
+		================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="./js/jquery.js"></script>
+		<script src="./js/bootstrap-transition.js"></script>
+		<script src="./js/bootstrap-alert.js"></script>
+		<script src="./js/bootstrap-modal.js"></script>
+		<script src="./js/bootstrap-dropdown.js"></script>
+		<script src="./js/bootstrap-scrollspy.js"></script>
+		<script src="./js/bootstrap-tab.js"></script>
+		<script src="./js/bootstrap-tooltip.js"></script>
+		<script src="./js/bootstrap-popover.js"></script>
+		<script src="./js/bootstrap-button.js"></script>
+		<script src="./js/bootstrap-collapse.js"></script>
+		<script src="./js/bootstrap-carousel.js"></script>
+		<script src="./js/bootstrap-typeahead.js"></script>
+
+	</body>
 </html>
