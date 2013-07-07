@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+	<head>
+		<% include head.ejs %>
+	</head>
+
+	<body>
+		
+	<%include navbar %>
+
+		<div class="container">
+			<div class="row">
+			<div id="searchBar" class="navbar">
+				<div class="navbar-inner">
+					<form class="navbar-form listing-search">
+						<fieldset>
+							<input type="text" placeholder="Trip Origin"></input>
+							<input type="text" placeholder="Trip Destination"></input>
+							<input class="date" type="date"></input>
+							<input type="submit" class="btn btn-primary" value="Find Trips"></input>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+		</div>
+
+		<div class="container">
+		<div class="row">
+			<div class="span3">
+				<div id="filterSearch" class="well">
+					<h4>Search Options</h4>
+					<ul class="nav nav-list">
+					  <li class="nav-header">Sort By: </li>
+					  <li><a href="#">Price</a></li>
+					  <li><a href="#">Date</a></li>
+					  <li><a href="#">Securtiy Rating</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<% if(trips.length > 0){ %>
+			<% for(var i=0; i<trips.length; i++){%>
+			<% var url = "/trip/" + trips[i]._id%>
+			<div class="span9">
+				<div class="listing well">
+					<div class="profile-pic">
+						<a href="#" id="user-info" class="img-polaroid profile-pic" rel="popover" 
+						title=<%=trips[i].dasher%>
+						data-content="<h5>This guy is a total dick.</h5>" 
+						data-html="true"
+						data-placement="left">
+							<img src="./img/default_profile.jpg" />
+					</a>
+						<img class="stars" src="./img/stars.jpg" />
+					</div>
+					<div class="info">
+						<h2>Origin: <%=trips[i].origin.results[0].formatted_address%></h2>
+						<h2>Destination: <%=trips[i].destination.results[0].formatted_address%></h2>
+						<h3>Date: 7/4/2013</h3>
+						<a href=<%=url%>><button class="btn btn-primary">Dash</button></a>
+					</div>
+					<div class="cost">
+						<h3>$<%=trips[i].cost%></h3>
+						<p>$<%=trips[i].rate%>/hr</p>
+					</div>
+				</div>
+			</div>
+			<%}}else{%>
+			<div class="span9">
+				<h1>Sorry, No trips.</h1>
+			</div>
+			<%}%>
+
+
+			
+		<div class="row">
+			<div class="span4 offset8">
+			<div class="pagination">
+			  <ul>
+			    <li><a href="#">Prev</a></li>
+			    <li><a href="#">1</a></li>
+			    <li><a href="#">2</a></li>
+			    <li><a href="#">3</a></li>
+			    <li><a href="#">4</a></li>
+			    <li><a href="#">5</a></li>
+			    <li><a href="#">Next</a></li>
+			  </ul>
+			</div>
+			</div>
+		</div>
+		</div>
+
+
+
+
+
+		<!-- Le javascript
+		================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="./js/jquery.js"></script>
+		<script src="./js/bootstrap-transition.js"></script>
+		<script src="./js/bootstrap-alert.js"></script>
+		<script src="./js/bootstrap-modal.js"></script>
+		<script src="./js/bootstrap-dropdown.js"></script>
+		<script src="./js/bootstrap-scrollspy.js"></script>
+		<script src="./js/bootstrap-tab.js"></script>
+		<script src="./js/bootstrap-tooltip.js"></script>
+		<script src="./js/bootstrap-popover.js"></script>
+		<script src="./js/bootstrap-button.js"></script>
+		<script src="./js/bootstrap-collapse.js"></script>
+		<script src="./js/bootstrap-carousel.js"></script>
+		<script src="./js/bootstrap-typeahead.js"></script>
+
+					<!-- Custom Form -->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#user-info').popover();
+				$('#user-info').onclick = function(){
+					$('#filterSearch').hide(); 
+				};
+			});
+
+		</script>
+
+	</body>
+</html>

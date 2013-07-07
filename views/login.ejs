@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<%include head.ejs%>
+	</head>
+
+<body>
+	<% include navbar %>
+
+	<div class="container">
+	    <div class="row">
+
+			<div class="span5">
+			  <form action="/login" method="POST" class="form-signin">
+			    <h2 class="form-signin-heading">Please Log In</h2>
+			    <input type="text" class="input-block-level" name="email" placeholder="Email address">
+			    <input type="password" class="input-block-level" name="password" placeholder="Password">
+			    <button class="btn btn-large btn-primary" type="submit">Log in</button>
+			  </form>
+				</div>
+			<div id="fbLoginBox" class="span4" >
+					<img src="./img/fb-login.png" />
+			</div>
+
+	    </div>
+	    </div> <!-- /container -->
+	</div>
+
+
+		<!-- Le javascript
+		================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="./js/jquery.js"></script>
+		<script src="./js/bootstrap-transition.js"></script>
+		<script src="./js/bootstrap-alert.js"></script>
+		<script src="./js/bootstrap-modal.js"></script>
+		<script src="./js/bootstrap-dropdown.js"></script>
+		<script src="./js/bootstrap-scrollspy.js"></script>
+		<script src="./js/bootstrap-tab.js"></script>
+		<script src="./js/bootstrap-tooltip.js"></script>
+		<script src="./js/bootstrap-popover.js"></script>
+		<script src="./js/bootstrap-button.js"></script>
+		<script src="./js/bootstrap-collapse.js"></script>
+		<script src="./js/bootstrap-carousel.js"></script>
+		<script src="./js/bootstrap-typeahead.js"></script>
+
+	</body>
+</html>

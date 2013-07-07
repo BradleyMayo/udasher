@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<% include head.ejs %>
+	</head>
+
+	<body>
+		<% include navbar.ejs%>
+		<div class="container">
+			<div class="row">
+			<div id="searchBar" class="navbar">
+				<div class="navbar-inner">
+					<form class="navbar-form listing-search">
+						<fieldset>
+							<input type="text" placeholder="Trip Origin"></input>
+							<input type="text" placeholder="Trip Destination"></input>
+							<input class="date" type="date"></input>
+							<input type="submit" class="btn btn-primary" value="Find Trips"></input>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
+		</div>
+
+		<div class="container">
+		<div class="row">
+			<div class="span3">
+				<div id="filterSearch" class="well">
+					<h4>Search Options</h4>
+					<ul class="nav nav-list">
+					  <li class="nav-header">Sort By: </li>
+					  <li><a href="#">Proximity</h1>
+					  <li><a href="#">Date</a></li>
+					  <li><a href="#">Securtiy Rating</a></li>
+					</ul>
+				</div>
+			</div>
+			<% for(var i=0; i<items.length; i++){%>
+			<% var url = "/item/" + items[i]._id%>
+			<div class="span9">
+				<div class="listing well">
+					<a href="#" id="user-info" class="profile-pic img-polaroid" rel="popover" title="Display Name" 
+					data-content="<h5>This guy is a total dick.</h5>" 
+					data-html="true"
+					data-placement="left">
+						<img src="./img/default_profile.jpg" />
+					</a>
+					<div class="info">
+						<h2>Golf Clubs</h2>
+						<h3>Origin: <%=items[i].origin.results[0].formatted_address%></h3>
+						<h3>Destination: <%=items[i].destination.results[0].formatted_address%></h3>
+						<a href=<%=url%>><button class="btn btn-primary">Dash</button></a>
+					</div>
+					<div class="item-pic">
+						<img class="img-polaroid"src="./img/item_default.png" />
+					</div>
+				</div>
+			</div>
+			<%}%>
+	
+
+		<div class="row">
+			<div class="span4 offset8">
+			<div class="pagination">
+			  <ul>
+			    <li><a href="#">Prev</a></li>
+			    <li><a href="#">1</a></li>
+			    <li><a href="#">2</a></li>
+			    <li><a href="#">3</a></li>
+			    <li><a href="#">4</a></li>
+			    <li><a href="#">5</a></li>
+			    <li><a href="#">Next</a></li>
+			  </ul>
+			</div>
+			</div>
+		</div>
+		</div>
+
+
+
+
+
+		<!-- Le javascript
+		================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="./js/jquery.js"></script>
+		<script src="./js/bootstrap-transition.js"></script>
+		<script src="./js/bootstrap-alert.js"></script>
+		<script src="./js/bootstrap-modal.js"></script>
+		<script src="./js/bootstrap-dropdown.js"></script>
+		<script src="./js/bootstrap-scrollspy.js"></script>
+		<script src="./js/bootstrap-tab.js"></script>
+		<script src="./js/bootstrap-tooltip.js"></script>
+		<script src="./js/bootstrap-popover.js"></script>
+		<script src="./js/bootstrap-button.js"></script>
+		<script src="./js/bootstrap-collapse.js"></script>
+		<script src="./js/bootstrap-carousel.js"></script>
+		<script src="./js/bootstrap-typeahead.js"></script>
+
+					<!-- Custom Form -->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#user-info').popover();
+				$('#user-info').onclick = function(){
+					$('#filterSearch').hide(); 
+				};
+			});
+
+		</script>
+
+	</body>
+</html>

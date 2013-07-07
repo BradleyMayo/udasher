@@ -1,0 +1,51 @@
+<!-- Navbar
+============================================================= -->
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="brand" href="/">uDasher</a>
+			<div class="nav-collapse collapse">
+				<ul class="nav pull-right">
+					<%if(displayName != undefined) { %>
+					<li><a href="/post_trips">Post Trip</a></li>
+					<li><a href="/post_items">Post Item</a></li>
+					<li><a></a></li>
+					<form class="navbar-form pull-left">
+						<div class="btn-group">
+						  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						    <%= displayName %>
+						    <span class="caret"></span>
+						  </a>
+						  <ul class="dropdown-menu">
+						    <li><a href="#">View Profile</a></li>
+						    <li><a href="/logout">Logout</a></li>
+						  </ul>
+						</div>
+					</form>					
+					<% } 
+					else{ %>
+					<form class="navbar-form pull-left">
+						<div class="btn-group">
+						  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						    Login
+						    <span class="caret"></span>
+						  </a>
+						  <ul class="dropdown-menu">
+						    <li><a href="#loginModal" data-toggle="modal">Login</a></li>
+						    <li><a href="/auth/facebook">
+						    	<img src="./img/fb-icon.png" /> Login with Facebook</a>
+						    </li>
+						  </ul>
+						</div>
+					</form>
+					<% } %>
+				</ul>
+			</div><!--/.nav-collapse -->
+		</div>
+	</div>
+</div>

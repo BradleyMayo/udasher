@@ -1,0 +1,229 @@
+
+
+/* GLOBAL 
+=============================================== */
+body {
+  height: 100%; 
+  padding-top: 100px; /* 60px to make the container go all the way to the bottom of the topbar */
+}
+
+.gutter{
+	height: 20px;
+}
+
+.wrap{
+  min-height: 44.8em;
+}
+
+#footer{ 
+	position: relative;
+	bottom: 0%;
+	width: 100%; 
+	height: 300px;
+	padding: 20px 0px 0px 0px; 
+	margin: 20px 0px 0px 0px;
+	background-color: #284538; 
+}
+
+#footer .footerNavItem a{
+	color: #fff; 
+}
+
+#footer .footerNavItem a:hover{
+	color: #284538; 
+}
+
+
+
+/*Home
+=============================================== */
+
+#homeTopContent{
+	padding: 10px 0px 10px 0px; 
+}
+
+#homeTopContent img{
+	height: 350px;
+	width: 740px; 
+}
+
+#homeMidContent p{ 
+	text-align: justify; 
+}
+
+.social_media {
+	display: block; 
+	margin: 0 auto; 
+}
+
+	/*Forms*****************************************/
+		.textbox{ 
+			width: 80%; 
+		}
+
+		.select{
+			width: 45%;
+		}
+
+		.date{ 
+			width: 120px; 
+		}
+
+.modal-body{
+	width: 400px;
+	margin: 0 auto;
+}
+
+
+
+/*Find Trips / Find Items
+================================================= */
+
+#searchBar{
+	margin: 20px 0px 0px 20px; 
+	height: 100px; 
+	width: 98%;
+	min-width: 760px; 1 
+}
+
+
+
+#searchBar .listing-search{
+	margin: 0px 0px 0px 10px; 
+}
+
+#filterSearch{
+	height: 300px;	
+	margin: 0% 0% 100% 0%; 
+}
+
+#filterSearch h4{
+	padding-bottom: 5px; 
+	border-bottom: solid 1px #ccc; 
+}
+
+.listing{
+	padding-top: 20px; 
+	height: 125px;
+}
+
+.listing h2 {
+	line-height: 20px; 
+	font-size: 20px; 
+}
+.listing h3 {
+	line-height: 14px; 
+	font-size: 14px; 
+}
+
+.listing .info{
+	width: 420px;
+	margin: 6px 0px 0px 40px; 
+	float: left;
+}
+
+.listing .cost{
+	text-align: center; 
+	margin: 30px 0px 0px 520px
+}
+
+.listing .cost h3{
+	font-size: 32px; 
+	line-height: 30px; 
+}
+
+.listing p{
+	line-height: 10px; 
+	font-size: 12px; 
+}
+
+.listing button {
+	width: 200px;
+}
+
+.profile-pic{
+	cursor: pointer;
+	width: 100px;
+	height: 100px;
+	float: left; 
+}
+.stars{
+	margin: 10px 5px;
+}
+.listing .item-pic{
+	margin: 30px 0px 0px 580px;
+}
+.item-pic img{
+	width: 50px;
+	height: 50px;
+}
+
+/*Trip Page
+==========================================*/
+.trip{
+	padding: 20px 0px 20px 0px; 
+	height: 115px;
+}
+
+.trip h2 {
+	line-height: 20px; 
+	font-size: 20px; 
+}
+.trip h3 {
+	line-height: 14px; 
+	font-size: 14px; 
+}
+
+.cost-box h4 {
+	line-height: 28px; 
+	font-size: 14px; 
+	border-bottom: solid 1px #ccc; 
+}
+
+.trip .info{
+	margin: 6px 0px 0px 20px; 
+	float: left;
+}
+
+#userItems img,
+#userSentItems img
+{
+	float: left;
+	height: 100px;
+	width: 100px; 
+}
+
+#userSentItems{
+
+}
+
+/* Login page
+========================================*/
+
+#fbLoginBox{
+	padding: 60px 0px 0px 100px;
+}
+
+
+/* Post Trips
+=======================================*/
+
+#postTrip{
+	min-height: 600px;
+}
+#postTrip input,
+#postTrip select{
+	margin-right: 10px; 
+	margin-bottom: 20px; 
+}
+
+/*Post Item
+=======================================*/
+#postItem{
+	min-height: 500px;
+}
+#postItem input,
+#postItem select{
+	margin-right: 10px; 
+	margin-bottom: 20px; 
+}
