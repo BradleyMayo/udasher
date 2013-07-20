@@ -1,7 +1,11 @@
+
 exports.item = function (){
-	return {
-	
-		trip_id      : Object,//designated by unique trip._id
+	return {	
+		trip         : {
+			trip_id        : Object,//designated by unique trip._id
+			added_distance : Number,
+		},
+		
 		image_id     : String,//designated by unique picture_id
 
 		sender       : Object,//designated by username
@@ -12,32 +16,35 @@ exports.item = function (){
 		name         : String,
 		description  : String,
 		
-		upload_Date  : Date,
-		desired_Date : Date,
+		upload_date  : Date,
+		desired_date : Date,
 		completed    : Boolean,//should be date
 	}
 }
 
 exports.trip = function (){
 	return {
+		items         : Array,//designated by item_id
 
-		items       : Array,//designated by item_id
-
-		dasher      : Object,
+		dasher        : Object,
 		
-		origin      : Object,
-		destination : Object,
-
-		cost        : Number,
-		rate        : Number,
+		origin        : Object,
+		destination   : Object,
 		
-		completed   : Boolean,//should be date
+		directions    : Object,
+		base_distance : Number,
+
+		cost          : Number,
+		rate          : Number,
+		
+		upload_date   : Date,
+		desired_date  : Date,
+		completed     : Boolean,//should be date
 	}
 }
 
 exports.user = function (){
 	return {
-
 		email       : String,
 		password    : String,
 		
@@ -51,16 +58,3 @@ exports.user = function (){
 	}
 }
 
-exports.image = function(){
-	return {
-		image:Object,
-	}
-}
-
-function name(){
-	return {
-	
-		first          : String, 
-		last           : String, 
-	}
-}

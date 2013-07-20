@@ -73,36 +73,40 @@ app.get('/auth/facebook/callback', passport.authenticate('facebook', { successRe
 //Local Routing-----------------------------------------------------
 
 app.get('/', routes.index);
+
 app.get('/find_trips', routes.find_trips);
 app.get('/find_items', routes.find_items);
+
 app.get('/post_trips', routes.post_trips);
 app.get('/post_items', routes.post_items);
-app.get('/signup', routes.signup);
-app.get('/login_page', routes.login_page)
-app.get('/logout', routes.logout);
-app.get('/new_user_fb', routes.new_user_fb);
+
 app.get('/trip/:id', routes.trip);
 app.get('/item/:id', routes.item);
+
 app.get('/attach_item/:trpid/:itmid', routes.attach_item);
+
+app.get('/signup', routes.signup);
+app.get('/new_user_fb', routes.new_user_fb);
+app.get('/login_page', routes.login_page)
+
+app.get('/logout', routes.logout);
 
 //Local Data Handling----------------------------------------------
 
 app.post('/login', routes.login);
-app.post('/new_user ', routes.new_user);
+app.post('/new_user', routes.new_user);
+
 app.post('/new_trip', routes.new_trip);
 app.post('/new_item', routes.new_item);
+
 app.post('/find_trips', routes.sort_trips);
 app.post('/find_items', routes.sort_items);
 
 //Error Handling---------------------------------------------------
+//(make sure this is below all other requests)
 /*
-app.error(function(err, req, res, next){
-	if (err instanceof NotFound){
-		res.render('404.ejs');
-	}
-	else {
-		next(err);
-	}
+app.get('*', function(req, res){
+	res.send("ERROR 404  \"" + req.originalUrl + "\"  does not exist.", 404);
 });
 */
 

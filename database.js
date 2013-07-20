@@ -1,7 +1,10 @@
 var schemas = require('./schemas');
 var objects = require('./objects');
+var password = require('./password');
+
 var mongoose = require('mongoose');
 var async = require('async');
+var request = require('request');
 
 var gm = require('googlemaps');
 
@@ -19,9 +22,21 @@ function findTotalDistance(startLocation, endLocation, callback){
 	var location2 = this.destination.results[0].formatted_address;
 
 	gm.distance(location1, startLocation, function(err, dst1){
-		gm.distance(location2, endLocation, function(err, dst2){
-			callback(dst1.rows[0].elements[0].distance.value/1000 + dst2.rows[0].elements[0].distance.value/1000);
-		});
+		if (dst1 == undefined){
+			console.log("Error in findTotalDistance dst1");
+			//handle error case here
+		}
+		else{
+			gm.distance(location2, endLocation, function(err, dst2){
+				if (dst2 == undefined){
+					console.log("Error in findTotalDistance dst1");
+					//handle error case here
+				}
+				else{
+					callback(dst1.rows[0].elements[0].distance.value/1000 + dst2.rows[0].elements[0].distance.value/1000);
+				}
+			});
+		}
 	});
 }
 
@@ -31,21 +46,27 @@ var trip  = db.model('trip', tripSchema);
 var item  = db.model('item', itemSchema);
 
 exports.addUserWithEmailAndPassword = function(req, res){
-	var newUser = new user({email : req.param('email'), password : req.param('password'), displayName : req.param('displayName')});
+	password.hash(req.param('password'), function(err, pw){
+		var newUser = new user({email : req.param('email'), password : pw, displayName : req.param('displayName')});
 
-	user.findOne({email: req.param('email')}, function(err, user){
-		if (err) throw err;
-		else if (user == undefined) {
-			newUser.save(function(err){
-				console.log("Adding User With Email And Password: " + req.param('email'));//removable
-				if(err) throw err;	
-				else exports.loginWithEmailAndPassword(req, res);
-			});
-		}
-		else {
-			console.log("User already exists");//change
-			res.redirect('/');
-		}
+		user.findOne({email: req.param('email')}, function(err, user){
+			if (err) {
+				console.log("ERROR : addUserWithEmailAndPassword, 0");
+			}
+			else if (user == undefined) {
+				newUser.save(function(err){
+					console.log("Adding User With Email And Password: " + req.param('email'));//removable
+					if(err) {
+						console.log("ERROR : addUserWithEmailAndPassword, 1");
+					}
+					else exports.loginWithEmailAndPassword(req, res);
+				});
+			}
+			else {
+				console.log("User already exists");//change
+				res.redirect('/');
+			}
+		});
 	});
 };
 
@@ -53,20 +74,26 @@ exports.addUserWithFB = function(profile){
 	var FBuser = new user({facebook: profile, displayName : profile.displayName});
 	
 	user.findOne({'facebook.id': profile.id}, function(err, user){
-		if (err) throw err; 
+		if (err) {
+			console.log("ERROR : addUserWithFB, 0");
+		} 
 		else if (user != undefined);
 		else{
 			FBuser.save(function(err){
 				console.log("Adding User With Facebook: " + profile.displayName);//removable
-				if(err) throw err;
+				if(err) {
+					console.log("ERROR : addUserWithFB, 1");
+				}
 			});
 		}
 	});
 };
 
-exports.loginWithFacebook = function(req, res){
+exports.loginWithFacebook = function(req, res, route){
 	user.findOne({'facebook.id': req.user}, function(err, user){
-		if(err) throw err;
+		if(err) {
+			console.log("ERROR : loginWithFacebook, 0");
+		}
 		else{
 			console.log("Facebook Profile Found, logging in.");//removable
 			req.session._id = user._id; 
@@ -78,7 +105,7 @@ exports.loginWithFacebook = function(req, res){
 };
 
 exports.loginWithEmailAndPassword = function(req, res){
-	user.findOne({email: req.param('email'), password: req.param('password')}, function(err, user){
+	user.findOne({email: req.param('email')}, function(err, user){
 		if (err) {
 			throw err;
 		}
@@ -87,10 +114,17 @@ exports.loginWithEmailAndPassword = function(req, res){
 			res.redirect('/');
 		}
 		else {
-			req.session._id = user._id;
-			req.session.displayName = user.displayName;
-			req.session.save();
-			res.redirect('/');
+			password.validate(req.param('password'), user.password, function(error, response){
+				if (response === true){
+					req.session._id = user._id;
+					req.session.displayName = user.displayName;
+					req.session.save();
+					res.redirect('/');
+				}
+				else {
+					res.redirect('/');
+				}
+			});
 		}
 	});
 };
@@ -136,32 +170,8 @@ exports.showItem = function(req, res, route){
 		else if (itm == undefined){
 			console.log('ITEM NOT FOUND: database.showItem');
 		}
-		else {
-			markers = [
-				{ 'location': itm.origin.results[0].formatted_address },
-				{ 'location': itm.destination.results[0].formatted_address,
-					'color': 'red',
-					'label': 'A',
-					'shadow': 'false',
-					'icon' : 'http://chart.apis.google.com/chart?chst=d_map_pin_icon&chld=cafe%7C996600'
-				}
-			]
-
-			styles = [
-				{ 'feature': 'road', 'element': 'all', 'rules': 
-					{ 'hue': '0x00ff00' }
-				}
-			]
-
-			paths = [
-				{ 'color': '0x0000ff', 'weight': '5', 'points': 
-					[ itm.origin.results[0].geometry.location.lat + "," + itm.origin.results[0].geometry.location.lng, itm.destination.results[0].geometry.location.lat + "," + itm.destination.results[0].geometry.location.lng]
-				}
-			]
-		
-			var imgURL = gm.staticMap(undefined, undefined,'500x400', false, false, 'roadmap', undefined, styles, paths);
-				
-			res.render(route, {displayName: req.session.displayName, item : itm, image : imgURL});
+		else {				
+			res.render(route, {displayName: req.session.displayName, item : itm});
 		}
 	});
 };
@@ -176,14 +186,37 @@ exports.showAllItems = function(req, res, route){
 };
 
 exports.addTrip = function(req, res){
-	gm.geocode(req.param('origin'), function(err, originResults){
+	var origin = "";
+	if (req.param('originAddress') != undefined) origin += req.param('originAddress') + " ";
+	if (req.param('originCity')    != undefined) origin += req.param('originCity')    + " ";
+	if (req.param('originState')   != undefined) origin += req.param('originState')   + " ";
+	if (req.param('originZip')     != undefined) origin += req.param('originZip')     + " ";
+	
+	var destination = "";
+	if (req.param('destinationAddress') != undefined) destination += req.param('destinationAddress') + " ";
+	if (req.param('destinationCity')    != undefined) destination += req.param('destinationCity')    + " ";
+	if (req.param('destinationState')   != undefined) destination += req.param('destinationState')   + " ";
+	if (req.param('destinationZip')     != undefined) destination += req.param('destinationZip')     + " ";
+
+	console.log(origin);
+	console.log(destination);
+
+	gm.geocode(origin, function(err, originResults){
 		if (err) throw err;
 
-		gm.geocode(req.param('destination'), function(error, destinationResults){
+		gm.geocode(destination, function(error, destinationResults){
 			if (error) throw error;
 
 			var newTrip = new trip(objects.newTrip(originResults, destinationResults, req.param('cost'), req.param('rate'), req.session._id));
-			newTrip.save();
+			makeURL(newTrip, undefined, function(options){
+				getDirections(options, function(directions){
+					newTrip.directions = directions;
+					exports.computeTotalDistance(directions, function(distance){
+						newTrip.base_distance = distance;
+						newTrip.save();			
+					});
+				});
+			});
 			user.findOne({_id : req.session._id}, function(err, usr){
 				if (err) throw err;
 				else {
@@ -193,7 +226,6 @@ exports.addTrip = function(req, res){
 			});
 		});
 	});
-
 };
 
 exports.showTrip = function(req, res, route){
@@ -207,7 +239,17 @@ exports.showTrip = function(req, res, route){
 				findItemProperties(req, res, trp, route);
 			}
 			else {
-				getDirections(req, res, trp, undefined, route);
+				makeURL(trp, undefined, function(options){
+					getDirections(options, function(directions){//repeated code
+						exports.computeTotalDistance(directions, function(distance){
+							console.log(distance);
+						});
+
+						item.find({sender : req.session._id}, function(err, itms){
+							res.render(route, {displayName: req.session.displayName, trip : trp, items : itms});//, image : imgURL});
+						});
+					});						
+				});
 			}
 		}
 	});
@@ -217,9 +259,6 @@ exports.showAllTrips = function(req, res, route){
 	trip.find(function(err, trips){
 		if (err) throw err;
 		else{
-			for(var i=0; i<trips.length; i++){
-				console.log(trips[i].origin.formatted_address);
-			}
 			res.render(route, {displayName: req.session.displayName, trips: trips});
 		}
 	});	
@@ -233,19 +272,19 @@ exports.showSortedTrips = function(req, res, route){
 
 exports.showSortedItems = function(req, res, route){
 	getClosestItems(req, res, {origin : req.param('origin'), destination : req.param('destination')}, function(sortedList){
-		res.render(route, {displayName : req.session.displayName, items : sortedList});
+		res.render(route, {displayName : req.session.displayName, items : sortedList, query_location : {origin : req.param('origin'), destination : req.param('destination')}});
 	}); 
 };
 
 //testing////////////////////////////////////////////////////////
-exports.computeTotalDistance = function(result){
+exports.computeTotalDistance = function(directions, callback){
 	var total = 0;
-	var myroute = result.routes[0];
+	var myroute = directions.routes[0];
 	for (i = 0; i < myroute.legs.length; i++) {
 		total += myroute.legs[i].distance.value;
 	}
 	total = (total / 1000) * 0.621371;
-	console.log("Total Distance: " + total + " miles");
+	callback(total);
 };
 
 exports.attachItem = function(req, res, route){
@@ -278,40 +317,55 @@ function findItemProperties(req, res, trp, route){
 			console.log(waypoints);//removable
 
 			if (waypoints.length == (trp.items.length * 2)){
-				getDirections(req, res, trp, waypoints, route);
+				makeURL(trp, waypoints, function(options){
+					getDirections(options, function(directions){//repeated code
+						exports.computeTotalDistance(directions, function(distance){
+							console.log(distance);
+						});
+
+						item.find({sender : req.session._id}, function(err, itms){
+							res.render(route, {displayName: req.session.displayName, trip : trp, items : itms});//, image : imgURL});
+						});
+					});		
+				
+				});
 			}
 		});
 	});
 }
 
-function getDirections(req, res, trp, waypoints, route){
-	console.log(	gm.directions((trp.origin.results[0].geometry.location.lat + "," + trp.origin.results[0].geometry.location.lng), (trp.destination.results[0].geometry.location.lat + "," + trp.destination.results[0].geometry.location.lng), function(err, directions){
-		if (err) throw err;
+function makeURL(trp, waypoints, callback){
+	var dirURL = gm.directions((trp.origin.results[0].geometry.location.lat + "," + trp.origin.results[0].geometry.location.lng), (trp.destination.results[0].geometry.location.lat + "," + trp.destination.results[0].geometry.location.lng), function(err, und){}, 'false', undefined, waypoints, undefined, undefined, undefined, undefined);
 
-		exports.computeTotalDistance(directions);
-
-		var startToFinish = [];
-		for (var acc0 = 0; acc0 < directions.routes.length; acc0++){
-			for (var acc1 = 0; acc1 < directions.routes[acc0].legs.length; acc1++){
-				for (var acc2 = 0; acc2 < directions.routes[acc0].legs[acc1].steps.length; acc2++){
-					startToFinish.push(directions.routes[acc0].legs[acc1].steps[acc2].start_location.lat + "," + directions.routes[acc0].legs[acc1].steps[acc2].start_location.lng, directions.routes[acc0].legs[acc1].steps[acc2].end_location.lat + "," +directions.routes[acc0].legs[acc1].steps[acc2].end_location.lng);
-				}
+	if (waypoints != undefined){
+		var tempArrayURL = dirURL.split("&waypoints=");
+		var newURL;
+		
+		for (var accumulator = 1; accumulator < tempArrayURL.length; accumulator++){
+			if (accumulator == 1) newURL = tempArrayURL[0] + "&waypoints=" + tempArrayURL[1];
+			else newURL += "%7C" + tempArrayURL[accumulator];
+			if (accumulator == tempArrayURL.length - 1) {
+				console.log(newURL);//removable
+				callback({uri : newURL});
 			}
 		}
+	}
+	else {
+		console.log(dirURL);//removable
+		callback({uri : dirURL});
+	}
+	
+}
 
-		console.log("DIRECTIONS:");//removable
-		console.log(startToFinish);
-		paths = [
-			{ 'color': '0x0000ff', 'weight': '5', 'points': 
-				startToFinish
-			}
-		]
-
-		var imgURL = gm.staticMap(undefined, undefined,'500x400', false, false, 'roadmap', undefined, undefined, paths);
-		item.find({sender : req.session._id}, function(err, itms){
-			res.render(route, {displayName: req.session.displayName, trip : trp, items : itms, image : imgURL});
-		});
-	}, 'false', undefined, waypoints, undefined, undefined, undefined, undefined));
+function getDirections(options, callback) {
+	request(options, function(error, response, directions){
+		if (error) {
+			throw error;
+		}
+		if (response.statusCode === 200) {
+			callback(JSON.parse(directions));
+		}
+	});
 }
 
 function getClosestItems(req, res, location, callback){
@@ -330,7 +384,7 @@ function sort(list, location, callback){
 	var array = [];
 	async.forEach(list, function(itm, callback){
 		itm.findTotalDistance(location.origin, location.destination, function(dist){
-			itm.distance = dist;
+			itm.totalValue = itm.cost + ((dist/43) * itm.rate);
 			array.push(itm);	
 			callback();
 		});
@@ -338,8 +392,18 @@ function sort(list, location, callback){
 		if (err) return next(err);
 	
 		callback(array.sort(function(a, b){
-			return a.distance - b.distance;
+			return a.totalValue - b.totalValue;
 		}));
 	});
 }
+
+
+
+
+
+////////////////////////////////////////////////////////
+
+
+
+
 
