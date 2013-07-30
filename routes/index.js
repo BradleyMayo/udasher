@@ -73,7 +73,7 @@ exports.login = function(req, res){
 		db.loginWithEmailAndPassword(req, res);
 	}
 	else if (req.session._id != undefined){
-		db.loginWithSession_id(req, res); 	
+		db.loginWithSession_id(req, res); //does not exist?
 	}
 	else {
 		console.log("Not enough information for login");

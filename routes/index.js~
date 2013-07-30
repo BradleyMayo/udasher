@@ -3,25 +3,18 @@ var db = require('../database');
 var passport = require('passport');//removable?
 var fbStrategy = require('passport-facebook').Strategy;//removable?
 
-function update_page(req, page){
-	req.session.current_page = page;
-	req.session.save();
-}
-
 //GET routes ------------------------------------------------
 exports.index = function(req, res){
-	update_page(req, 'index');
 	console.log("Session number: " + req.session._id);//removable
 	db.display(req, res, 'index');
 };
 
 
 exports.find_trips = function(req, res){
-	update_page(req, 'find_trips');
-	db.showAllTrips(req, res, 'find_trips');
+	db.showAllTrips(req, res, 'find_trips'); 
 };
 exports.find_items = function(req, res){
-	db.showAllItems(req, res, 'find_items');
+	db.showAllItems(req, res, 'find_items'); 
 };
 
 
@@ -80,7 +73,7 @@ exports.login = function(req, res){
 		db.loginWithEmailAndPassword(req, res);
 	}
 	else if (req.session._id != undefined){
-		db.loginWithSession_id(req, res); 	
+		db.loginWithSession_id(req, res); //does not exist?
 	}
 	else {
 		console.log("Not enough information for login");
